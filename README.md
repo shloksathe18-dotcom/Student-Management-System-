@@ -45,16 +45,16 @@ A comprehensive web-based Student Management System built with HTML, CSS, and Ja
 
 ## 🚀 Demo Credentials
 
-### Admin Login
-- **Username:** `admin123`
+### Student Login
+- **Username:** `student123`
 - **Password:** `password123`
 
 ### Teacher Login
 - **Username:** `teacher123`
 - **Password:** `password123`
 
-### Student Login
-- **Username:** `student123`
+### Admin Login
+- **Username:** `admin123`
 - **Password:** `password123`
 
 ## 📁 Project Structure
@@ -78,12 +78,15 @@ Student-Management-System/
 
 ## 🎨 Design Features
 
-- **Responsive Design** - Works on desktop, tablet, and mobile devices
-- **Modern UI/UX** - Clean and intuitive interface
-- **Gradient Backgrounds** - Beautiful visual design
-- **Font Awesome Icons** - Professional iconography
-- **Smooth Animations** - Enhanced user experience
-- **Card-based Layout** - Organized information display
+- **📱 Fully Responsive Design** - Optimized for all devices (phones, tablets, desktops)
+- **🎯 Mobile-First Approach** - Designed with mobile users in mind
+- **✨ Modern UI/UX** - Clean and intuitive interface
+- **🌈 Gradient Backgrounds** - Beautiful visual design
+- **🎭 Font Awesome Icons** - Professional iconography
+- **🎬 Smooth Animations** - Enhanced user experience (respects reduced motion preferences)
+- **📋 Card-based Layout** - Organized information display
+- **👆 Touch-Optimized** - Large touch targets for mobile devices
+- **🔍 Accessible Design** - Keyboard navigation and screen reader support
 
 ## 💻 Technologies Used
 
@@ -154,10 +157,12 @@ Student-Management-System/
 
 ## 📊 System Requirements
 
-- **Browser:** Any modern web browser (Chrome, Firefox, Safari, Edge)
-- **Internet:** Required for Font Awesome icons
-- **Storage:** Minimal local storage for data persistence
-- **JavaScript:** Must be enabled
+- **📱 Mobile Devices:** iOS 12+, Android 8+ with modern browsers
+- **💻 Desktop:** Any modern web browser (Chrome 70+, Firefox 65+, Safari 12+, Edge 79+)
+- **🌐 Internet:** Required for Font Awesome icons and optimal experience
+- **💾 Storage:** Minimal local storage for data persistence (< 5MB)
+- **⚡ JavaScript:** Must be enabled for full functionality
+- **📐 Screen Size:** Optimized for 320px to 4K displays
 
 ## 🎯 Future Enhancements
 

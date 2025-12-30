@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Teacher Dashboard</p>
+            </div>
+            <div class="header-actions">
+                <span style="margin-right: 1rem; color: white;">
+                    <i class="fas fa-chalkboard-teacher"></i> Welcome, Teacher
+                </span>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="teacher-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                <li><a href="marks.html"><i class="fas fa-chart-line"></i> Marks</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> My Subjects</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Overview -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> My Classes Overview</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>My Students</h3>
+                    <p id="myStudents">0</p>
+                    <small>Across all classes</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Subjects Teaching</h3>
+                    <p>3</p>
+                    <small>Active subjects</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Classes Today</h3>
+                    <p>5</p>
+                    <small>Scheduled classes</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Pending Tasks</h3>
+                    <p>8</p>
+                    <small>Marks to enter</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="window.location.href='attendance.html'">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Mark Attendance</h3>
+                    <p>Record student attendance for today</p>
+                </div>
+
+                <div class="dashboard-card" onclick="window.location.href='marks.html'">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>Enter Marks</h3>
+                    <p>Add or update student marks</p>
+                </div>
+
+                <div class="dashboard-card" onclick="viewStudentList()">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>View Students</h3>
+                    <p>See all students in my classes</p>
+                </div>
+
+                <div class="dashboard-card" onclick="generateClassReport()">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Class Reports</h3>
+                    <p>Generate attendance and performance reports</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Classes -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chalkboard"></i> My Classes</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Mathematics</h3>
+                    <p>Class 10-A, 10-B</p>
+                    <small>45 students total</small>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="markAttendance('Math', '10-A')" class="btn btn-primary" style="margin: 0.2rem; padding: 0.5rem;">
+                            Attendance
+                        </button>
+                        <button onclick="enterMarks('Math', '10-A')" class="btn btn-success" style="margin: 0.2rem; padding: 0.5rem;">
+                            Marks
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3>Physics</h3>
+                    <p>Class 11-A, 12-A</p>
+                    <small>38 students total</small>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="markAttendance('Physics', '11-A')" class="btn btn-primary" style="margin: 0.2rem; padding: 0.5rem;">
+                            Attendance
+                        </button>
+                        <button onclick="enterMarks('Physics', '11-A')" class="btn btn-success" style="margin: 0.2rem; padding: 0.5rem;">
+                            Marks
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Chemistry</h3>
+                    <p>Class 11-B, 12-B</p>
+                    <small>42 students total</small>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="markAttendance('Chemistry', '11-B')" class="btn btn-primary" style="margin: 0.2rem; padding: 0.5rem;">
+                            Attendance
+                        </button>
+                        <button onclick="enterMarks('Chemistry', '11-B')" class="btn btn-success" style="margin: 0.2rem; padding: 0.5rem;">
+                            Marks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-calendar-day"></i> Today's Schedule</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Subject</th>
+                            <th>Class</th>
+                            <th>Room</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>09:00 - 09:45</strong></td>
+                            <td>Mathematics</td>
+                            <td>10-A</td>
+                            <td>Room 101</td>
+                            <td><span class="badge" style="background: #27ae60; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Completed</span></td>
+                            <td>
+                                <button onclick="viewClassDetails('Math', '10-A', '09:00')" class="btn btn-primary" style="padding: 0.25rem 0.5rem;">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>10:00 - 10:45</strong></td>
+                            <td>Physics</td>
+                            <td>11-A</td>
+                            <td>Lab 201</td>
+                            <td><span class="badge" style="background: #3498db; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">In Progress</span></td>
+                            <td>
+                                <button onclick="markAttendance('Physics', '11-A')" class="btn btn-success" style="padding: 0.25rem 0.5rem;">
+                                    <i class="fas fa-check"></i> Attendance
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>11:15 - 12:00</strong></td>
+                            <td>Chemistry</td>
+                            <td>12-B</td>
+                            <td>Lab 202</td>
+                            <td><span class="badge" style="background: #f39c12; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Upcoming</span></td>
+                            <td>
+                                <button onclick="prepareClass('Chemistry', '12-B')" class="btn btn-primary" style="padding: 0.25rem 0.5rem;">
+                                    <i class="fas fa-play"></i> Start
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>14:00 - 14:45</strong></td>
+                            <td>Mathematics</td>
+                            <td>10-B</td>
+                            <td>Room 102</td>
+                            <td><span class="badge" style="background: #95a5a6; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Scheduled</span></td>
+                            <td>
+                                <button onclick="prepareClass('Math', '10-B')" class="btn btn-primary" style="padding: 0.25rem 0.5rem;">
+                                    <i class="fas fa-clock"></i> Later
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-history"></i> Recent Activities</h2>
+            </div>
+            <div id="recentActivities">
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #3498db; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Attendance Marked</strong>
+                    <p>Mathematics - Class 10-A (42/45 present)</p>
+                    <small><i class="fas fa-clock"></i> 30 minutes ago</small>
+                </div>
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #27ae60; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Marks Entered</strong>
+                    <p>Physics Unit Test - Class 11-A (38 students)</p>
+                    <small><i class="fas fa-clock"></i> 2 hours ago</small>
+                </div>
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #e74c3c; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Class Completed</strong>
+                    <p>Chemistry Lab - Class 12-B</p>
+                    <small><i class="fas fa-clock"></i> Yesterday</small>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in and has teacher role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!isLoggedIn || userRole !== 'teacher') {
+                alert('Access denied! Please login as teacher.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            updateDashboardStats();
+        });
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            // Filter students for teacher's classes (simulated)
+            const myStudents = students.filter(student => 
+                ['10', '11', '12'].includes(student.class) && 
+                ['A', 'B'].includes(student.division)
+            );
+            
+            document.getElementById('myStudents').textContent = myStudents.length;
+        }
+
+        // Quick action functions
+        function markAttendance(subject, className) {
+            alert(`Marking attendance for ${subject} - Class ${className}\n\nThis would redirect to the attendance page with pre-selected class and subject.`);
+            // In a real application, this would redirect with parameters
+            window.location.href = `attendance.html?subject=${subject}&class=${className}`;
+        }
+
+        function enterMarks(subject, className) {
+            alert(`Entering marks for ${subject} - Class ${className}\n\nThis would redirect to the marks entry page.`);
+            window.location.href = `marks.html?subject=${subject}&class=${className}`;
+        }
+
+        function viewStudentList() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const myStudents = students.filter(student => 
+                ['10', '11', '12'].includes(student.class) && 
+                ['A', 'B'].includes(student.division)
+            );
+            
+            if (myStudents.length === 0) {
+                alert('No students found in your classes.');
+                return;
+            }
+            
+            let studentList = 'Students in My Classes:\n\n';
+            myStudents.forEach(student => {
+                studentList += `• ${student.fullName} (${student.rollNumber}) - Class ${student.class}-${student.division}\n`;
+            });
+            
+            alert(studentList);
+        }
+
+        function generateClassReport() {
+            alert('Class Report Generation:\n\n• Attendance Summary\n• Performance Analysis\n• Student Progress Report\n• Class Statistics\n\nThis would generate detailed reports for your classes.');
+        }
+
+        function viewClassDetails(subject, className, time) {
+            alert(`Class Details:\n\nSubject: ${subject}\nClass: ${className}\nTime: ${time}\nStatus: Completed\n\nAttendance: 42/45 students present\nTopic Covered: Chapter 5 - Quadratic Equations`);
+        }
+
+        function prepareClass(subject, className) {
+            alert(`Preparing for ${subject} class with ${className}\n\n• Check lesson plan\n• Prepare materials\n• Review previous class notes\n• Set up classroom`);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Add click handlers for dashboard cards
+        document.querySelectorAll('.dashboard-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Update time-based class status
+        function updateClassStatus() {
+            const now = new Date();
+            const currentTime = now.getHours() * 100 + now.getMinutes();
+            
+            // This would update class statuses based on current time
+            // For demo purposes, we'll keep the static status
+        }
+
+        // Initialize page
+        updateClassStatus();
+        setInterval(updateClassStatus, 60000); // Update every minute
+    </script>
+</body>
+</html>

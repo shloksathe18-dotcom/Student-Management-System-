@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Management - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Marks Management</p>
+            </div>
+            <div class="header-actions">
+                <span style="margin-right: 1rem; color: white;">
+                    <i class="fas fa-user"></i> <span id="userWelcome">Welcome</span>
+                </span>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu" id="navMenu">
+                <!-- Navigation will be populated based on user role -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Marks Entry Form (Teacher/Admin only) -->
+        <div class="card fade-in" id="marksEntryForm" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-edit"></i> Enter Marks</h2>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="examType">
+                        <i class="fas fa-clipboard-list"></i> Exam Type
+                    </label>
+                    <select id="examType" class="form-control">
+                        <option value="">Select Exam Type</option>
+                        <option value="Unit Test 1">Unit Test 1</option>
+                        <option value="Unit Test 2">Unit Test 2</option>
+                        <option value="Mid Term">Mid Term Exam</option>
+                        <option value="Final Exam">Final Exam</option>
+                        <option value="Assignment">Assignment</option>
+                        <option value="Project">Project</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="marksClass">
+                        <i class="fas fa-school"></i> Class
+                    </label>
+                    <select id="marksClass" class="form-control">
+                        <option value="">Select Class</option>
+                        <option value="10-A">Class 10-A</option>
+                        <option value="10-B">Class 10-B</option>
+                        <option value="11-A">Class 11-A</option>
+                        <option value="11-B">Class 11-B</option>
+                        <option value="12-A">Class 12-A</option>
+                        <option value="12-B">Class 12-B</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="marksSubject">
+                        <i class="fas fa-book"></i> Subject
+                    </label>
+                    <select id="marksSubject" class="form-control">
+                        <option value="">Select Subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="English">English</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="totalMarks">
+                        <i class="fas fa-calculator"></i> Total Marks
+                    </label>
+                    <input type="number" id="totalMarks" class="form-control" placeholder="Enter total marks" min="1" max="100">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button onclick="loadStudentsForMarks()" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Load Students
+                </button>
+            </div>
+        </div>
+
+        <!-- Student Marks Entry List (Teacher/Admin only) -->
+        <div class="card fade-in" id="studentMarksList" style="display: none;">
+            <div class="card-header">
+                <h3><i class="fas fa-users"></i> Enter Student Marks</h3>
+                <div>
+                    <button onclick="calculateAllGrades()" class="btn btn-success" style="margin-right: 0.5rem;">
+                        <i class="fas fa-calculator"></i> Calculate Grades
+                    </button>
+                    <button onclick="saveAllMarks()" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save All Marks
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Student Name</th>
+                            <th>Marks Obtained</th>
+                            <th>Total Marks</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marksEntryTable">
+                        <!-- Students will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Marks Summary -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> Marks Summary</h2>
+                <div id="summaryFilters">
+                    <select id="summaryClass" class="form-control" style="max-width: 200px; display: inline-block; margin-right: 1rem;">
+                        <option value="">All Classes</option>
+                        <option value="10-A">Class 10-A</option>
+                        <option value="10-B">Class 10-B</option>
+                        <option value="11-A">Class 11-A</option>
+                        <option value="11-B">Class 11-B</option>
+                        <option value="12-A">Class 12-A</option>
+                        <option value="12-B">Class 12-B</option>
+                    </select>
+                    <select id="summarySubject" class="form-control" style="max-width: 200px; display: inline-block; margin-right: 1rem;">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="English">English</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                    </select>
+                    <button onclick="generateMarksReport()" class="btn btn-success">
+                        <i class="fas fa-file-alt"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Average Score</h3>
+                    <p id="averageScore">0%</p>
+                    <small>Class average</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Highest Score</h3>
+                    <p id="highestScore">0%</p>
+                    <small>Best performance</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Pass Rate</h3>
+                    <p id="passRate">0%</p>
+                    <small>Students passing</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Total Students</h3>
+                    <p id="totalStudentsWithMarks">0</p>
+                    <small>Evaluated students</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marks Records -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-history"></i> Marks Records</h2>
+                <div>
+                    <input type="text" id="searchMarks" placeholder="Search by name or roll number..." 
+                           class="form-control" style="max-width: 300px; display: inline-block; margin-right: 1rem;">
+                    <button onclick="refreshMarksRecords()" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="marks-table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Exam Type</th>
+                            <th>Marks</th>
+                            <th>Total</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                            <th id="marksActionsHeader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marksRecordsTable">
+                        <!-- Marks records will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Student Personal Marks (Student view only) -->
+        <div class="card fade-in" id="studentPersonalMarks" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-line"></i> My Marks</h2>
+                <div>
+                    <select id="studentSubjectFilter" class="form-control" style="max-width: 200px; display: inline-block;">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="English">English</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Overall Average</h3>
+                    <p id="studentOverallAverage">0%</p>
+                    <small>All subjects</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Best Subject</h3>
+                    <p id="studentBestSubject">-</p>
+                    <small>Highest average</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Overall Grade</h3>
+                    <p id="studentOverallGrade">-</p>
+                    <small>Current standing</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Total Exams</h3>
+                    <p id="studentTotalExams">0</p>
+                    <small>Completed</small>
+                </div>
+            </div>
+            
+            <div class="table-responsive" style="margin-top: 2rem;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Exam Type</th>
+                            <th>Marks</th>
+                            <th>Total</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentMarksTable">
+                        <!-- Student's marks will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentUserRole = '';
+        let marksData = [];
+
+        // Initialize page based on user role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (!isLoggedIn) {
+                alert('Please login to access this page.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUserRole = userRole;
+            setupPageForRole(userRole, username);
+            loadMarksData();
+        });
+
+        function setupPageForRole(role, username) {
+            const navMenu = document.getElementById('navMenu');
+            const userWelcome = document.getElementById('userWelcome');
+            const marksEntryForm = document.getElementById('marksEntryForm');
+            const studentPersonalMarks = document.getElementById('studentPersonalMarks');
+            const marksActionsHeader = document.getElementById('marksActionsHeader');
+            
+            // Setup navigation based on role
+            if (role === 'admin') {
+                navMenu.innerHTML = `
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-registration.html"><i class="fas fa-user-plus"></i> Add Student</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html" class="active"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin';
+                marksEntryForm.style.display = 'block';
+                
+            } else if (role === 'teacher') {
+                navMenu.innerHTML = `
+                    <li><a href="teacher-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html" class="active"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> My Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> Welcome, Teacher';
+                marksEntryForm.style.display = 'block';
+                
+            } else if (role === 'student') {
+                navMenu.innerHTML = `
+                    <li><a href="student-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html" class="active"><i class="fas fa-chart-line"></i> My Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-graduate"></i> Welcome, Student';
+                studentPersonalMarks.style.display = 'block';
+                marksActionsHeader.style.display = 'none';
+            }
+        }
+
+        function loadMarksData() {
+            // Load or generate sample marks data
+            marksData = JSON.parse(localStorage.getItem('marksData') || '[]');
+            
+            if (marksData.length === 0) {
+                generateSampleMarksData();
+            }
+            
+            updateMarksSummary();
+            loadMarksRecords();
+            
+            if (currentUserRole === 'student') {
+                loadStudentPersonalMarks();
+            }
+        }
+
+        function generateSampleMarksData() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const subjects = ['Mathematics', 'Physics', 'Chemistry', 'English', 'Biology'];
+            const examTypes = ['Unit Test 1', 'Unit Test 2', 'Mid Term', 'Final Exam'];
+            
+            students.forEach(student => {
+                subjects.forEach(subject => {
+                    examTypes.forEach(examType => {
+                        // Generate random marks between 40-95
+                        const marksObtained = Math.floor(Math.random() * 56) + 40;
+                        const totalMarks = 100;
+                        const percentage = Math.round((marksObtained / totalMarks) * 100);
+                        const grade = calculateGrade(percentage);
+                        
+                        marksData.push({
+                            id: Date.now() + Math.random(),
+                            studentName: student.fullName,
+                            rollNumber: student.rollNumber,
+                            class: `${student.class}-${student.division}`,
+                            subject: subject,
+                            examType: examType,
+                            marksObtained: marksObtained,
+                            totalMarks: totalMarks,
+                            percentage: percentage,
+                            grade: grade,
+                            date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                        });
+                    });
+                });
+            });
+            
+            localStorage.setItem('marksData', JSON.stringify(marksData));
+        }
+
+        function calculateGrade(percentage) {
+            if (percentage >= 90) return 'A+';
+            if (percentage >= 80) return 'A';
+            if (percentage >= 70) return 'B+';
+            if (percentage >= 60) return 'B';
+            if (percentage >= 50) return 'C+';
+            if (percentage >= 40) return 'C';
+            return 'F';
+        }
+
+        function loadStudentsForMarks() {
+            const examType = document.getElementById('examType').value;
+            const selectedClass = document.getElementById('marksClass').value;
+            const selectedSubject = document.getElementById('marksSubject').value;
+            const totalMarks = document.getElementById('totalMarks').value;
+            
+            if (!examType || !selectedClass || !selectedSubject || !totalMarks) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const classStudents = students.filter(student => 
+                `${student.class}-${student.division}` === selectedClass
+            );
+            
+            if (classStudents.length === 0) {
+                alert('No students found for the selected class!');
+                return;
+            }
+            
+            const tableBody = document.getElementById('marksEntryTable');
+            tableBody.innerHTML = classStudents.map(student => `
+                <tr>
+                    <td><strong>${student.rollNumber}</strong></td>
+                    <td>${student.fullName}</td>
+                    <td>
+                        <input type="number" class="form-control" id="marks_${student.id}" 
+                               min="0" max="${totalMarks}" placeholder="Enter marks"
+                               onchange="calculatePercentageAndGrade('${student.id}', ${totalMarks})">
+                    </td>
+                    <td>${totalMarks}</td>
+                    <td><span id="percentage_${student.id}">-</span></td>
+                    <td><span id="grade_${student.id}" class="grade">-</span></td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('studentMarksList').style.display = 'block';
+        }
+
+        function calculatePercentageAndGrade(studentId, totalMarks) {
+            const marksInput = document.getElementById(`marks_${studentId}`);
+            const marksObtained = parseFloat(marksInput.value) || 0;
+            
+            if (marksObtained > totalMarks) {
+                alert('Marks obtained cannot be greater than total marks!');
+                marksInput.value = '';
+                return;
+            }
+            
+            const percentage = Math.round((marksObtained / totalMarks) * 100);
+            const grade = calculateGrade(percentage);
+            
+            document.getElementById(`percentage_${studentId}`).textContent = percentage + '%';
+            const gradeElement = document.getElementById(`grade_${studentId}`);
+            gradeElement.textContent = grade;
+            gradeElement.className = `grade grade-${grade.toLowerCase().replace('+', '')}`;
+        }
+
+        function calculateAllGrades() {
+            const totalMarks = parseFloat(document.getElementById('totalMarks').value);
+            const marksInputs = document.querySelectorAll('input[id^="marks_"]');
+            
+            marksInputs.forEach(input => {
+                const studentId = input.id.replace('marks_', '');
+                calculatePercentageAndGrade(studentId, totalMarks);
+            });
+            
+            alert('All grades calculated successfully!');
+        }
+
+        function saveAllMarks() {
+            const examType = document.getElementById('examType').value;
+            const selectedClass = document.getElementById('marksClass').value;
+            const selectedSubject = document.getElementById('marksSubject').value;
+            const totalMarks = parseFloat(document.getElementById('totalMarks').value);
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const classStudents = students.filter(student => 
+                `${student.class}-${student.division}` === selectedClass
+            );
+            
+            let savedCount = 0;
+            
+            classStudents.forEach(student => {
+                const marksInput = document.getElementById(`marks_${student.id}`);
+                const marksObtained = parseFloat(marksInput.value);
+                
+                if (marksObtained >= 0) {
+                    const percentage = Math.round((marksObtained / totalMarks) * 100);
+                    const grade = calculateGrade(percentage);
+                    
+                    // Remove existing marks for same exam/student/subject
+                    marksData = marksData.filter(record => 
+                        !(record.rollNumber === student.rollNumber && 
+                          record.subject === selectedSubject && 
+                          record.examType === examType)
+                    );
+                    
+                    // Add new marks record
+                    marksData.push({
+                        id: Date.now() + Math.random(),
+                        studentName: student.fullName,
+                        rollNumber: student.rollNumber,
+                        class: selectedClass,
+                        subject: selectedSubject,
+                        examType: examType,
+                        marksObtained: marksObtained,
+                        totalMarks: totalMarks,
+                        percentage: percentage,
+                        grade: grade,
+                        date: new Date().toISOString().split('T')[0]
+                    });
+                    
+                    savedCount++;
+                }
+            });
+            
+            localStorage.setItem('marksData', JSON.stringify(marksData));
+            
+            alert(`Marks saved successfully for ${savedCount} students!`);
+            
+            // Refresh data
+            updateMarksSummary();
+            loadMarksRecords();
+            
+            // Hide marks entry form
+            document.getElementById('studentMarksList').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('examType').value = '';
+            document.getElementById('marksClass').value = '';
+            document.getElementById('marksSubject').value = '';
+            document.getElementById('totalMarks').value = '';
+        }
+
+        function updateMarksSummary() {
+            if (marksData.length === 0) {
+                document.getElementById('averageScore').textContent = '0%';
+                document.getElementById('highestScore').textContent = '0%';
+                document.getElementById('passRate').textContent = '0%';
+                document.getElementById('totalStudentsWithMarks').textContent = '0';
+                return;
+            }
+            
+            const percentages = marksData.map(record => record.percentage);
+            const averageScore = Math.round(percentages.reduce((a, b) => a + b, 0) / percentages.length);
+            const highestScore = Math.max(...percentages);
+            const passingStudents = marksData.filter(record => record.percentage >= 40).length;
+            const passRate = Math.round((passingStudents / marksData.length) * 100);
+            const uniqueStudents = new Set(marksData.map(record => record.rollNumber)).size;
+            
+            document.getElementById('averageScore').textContent = averageScore + '%';
+            document.getElementById('highestScore').textContent = highestScore + '%';
+            document.getElementById('passRate').textContent = passRate + '%';
+            document.getElementById('totalStudentsWithMarks').textContent = uniqueStudents;
+        }
+
+        function loadMarksRecords() {
+            const tableBody = document.getElementById('marksRecordsTable');
+            const searchTerm = document.getElementById('searchMarks').value.toLowerCase();
+            
+            let filteredData = marksData;
+            
+            if (searchTerm) {
+                filteredData = marksData.filter(record => 
+                    record.studentName.toLowerCase().includes(searchTerm) ||
+                    record.rollNumber.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Sort by date (newest first)
+            filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Limit to recent 50 records for performance
+            filteredData = filteredData.slice(0, 50);
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="10" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <p>No marks records found.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = filteredData.map(record => `
+                <tr>
+                    <td>${record.studentName}</td>
+                    <td>${record.rollNumber}</td>
+                    <td>${record.class}</td>
+                    <td>${record.subject}</td>
+                    <td>${record.examType}</td>
+                    <td><strong>${record.marksObtained}</strong></td>
+                    <td>${record.totalMarks}</td>
+                    <td><strong>${record.percentage}%</strong></td>
+                    <td><span class="grade grade-${record.grade.toLowerCase().replace('+', '')}">${record.grade}</span></td>
+                    <td ${currentUserRole === 'student' ? 'style="display: none;"' : ''}>
+                        ${currentUserRole !== 'student' ? `
+                            <button onclick="editMarks('${record.id}')" class="btn btn-primary" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteMarks('${record.id}')" class="btn btn-danger" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadStudentPersonalMarks() {
+            const username = localStorage.getItem('username');
+            const studentMarks = marksData.filter(record => record.rollNumber === username);
+            
+            if (studentMarks.length === 0) {
+                // Generate demo marks for demo student
+                const demoMarks = [
+                    { subject: 'Mathematics', examType: 'Unit Test 1', marksObtained: 85, totalMarks: 100, percentage: 85, grade: 'A', date: '2024-01-15' },
+                    { subject: 'Physics', examType: 'Mid Term', marksObtained: 78, totalMarks: 100, percentage: 78, grade: 'B+', date: '2024-01-12' },
+                    { subject: 'Chemistry', examType: 'Unit Test 1', marksObtained: 92, totalMarks: 100, percentage: 92, grade: 'A+', date: '2024-01-10' },
+                    { subject: 'English', examType: 'Assignment', marksObtained: 88, totalMarks: 100, percentage: 88, grade: 'A', date: '2024-01-08' }
+                ];
+                
+                updateStudentStats(demoMarks);
+                displayStudentMarks(demoMarks);
+            } else {
+                updateStudentStats(studentMarks);
+                displayStudentMarks(studentMarks);
+            }
+        }
+
+        function updateStudentStats(marks) {
+            if (marks.length === 0) return;
+            
+            const averagePercentage = Math.round(marks.reduce((sum, mark) => sum + mark.percentage, 0) / marks.length);
+            
+            // Find best subject
+            const subjectAverages = {};
+            marks.forEach(mark => {
+                if (!subjectAverages[mark.subject]) {
+                    subjectAverages[mark.subject] = [];
+                }
+                subjectAverages[mark.subject].push(mark.percentage);
+            });
+            
+            let bestSubject = '';
+            let bestAverage = 0;
+            Object.keys(subjectAverages).forEach(subject => {
+                const avg = subjectAverages[subject].reduce((a, b) => a + b, 0) / subjectAverages[subject].length;
+                if (avg > bestAverage) {
+                    bestAverage = avg;
+                    bestSubject = subject;
+                }
+            });
+            
+            const overallGrade = calculateGrade(averagePercentage);
+            
+            document.getElementById('studentOverallAverage').textContent = averagePercentage + '%';
+            document.getElementById('studentBestSubject').textContent = bestSubject || '-';
+            document.getElementById('studentOverallGrade').textContent = overallGrade;
+            document.getElementById('studentTotalExams').textContent = marks.length;
+        }
+
+        function displayStudentMarks(marks) {
+            const tableBody = document.getElementById('studentMarksTable');
+            
+            if (marks.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <p>No marks available yet.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Sort by date (newest first)
+            marks.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            tableBody.innerHTML = marks.map(record => `
+                <tr>
+                    <td>${record.subject}</td>
+                    <td>${record.examType}</td>
+                    <td><strong>${record.marksObtained}</strong></td>
+                    <td>${record.totalMarks}</td>
+                    <td><strong>${record.percentage}%</strong></td>
+                    <td><span class="grade grade-${record.grade.toLowerCase().replace('+', '')}">${record.grade}</span></td>
+                    <td>${record.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        function editMarks(recordId) {
+            const record = marksData.find(r => r.id == recordId);
+            if (record) {
+                const newMarks = prompt(`Edit marks for ${record.studentName} in ${record.subject} (${record.examType}):\n\nCurrent marks: ${record.marksObtained}/${record.totalMarks}\nEnter new marks:`, record.marksObtained);
+                
+                if (newMarks !== null && !isNaN(newMarks) && newMarks >= 0 && newMarks <= record.totalMarks) {
+                    record.marksObtained = parseFloat(newMarks);
+                    record.percentage = Math.round((record.marksObtained / record.totalMarks) * 100);
+                    record.grade = calculateGrade(record.percentage);
+                    
+                    localStorage.setItem('marksData', JSON.stringify(marksData));
+                    loadMarksRecords();
+                    updateMarksSummary();
+                    alert('Marks updated successfully!');
+                } else if (newMarks !== null) {
+                    alert('Please enter valid marks!');
+                }
+            }
+        }
+
+        function deleteMarks(recordId) {
+            if (confirm('Are you sure you want to delete this marks record?')) {
+                marksData = marksData.filter(r => r.id != recordId);
+                localStorage.setItem('marksData', JSON.stringify(marksData));
+                loadMarksRecords();
+                updateMarksSummary();
+                alert('Marks record deleted successfully!');
+            }
+        }
+
+        function refreshMarksRecords() {
+            loadMarksRecords();
+            updateMarksSummary();
+            if (currentUserRole === 'student') {
+                loadStudentPersonalMarks();
+            }
+            alert('Marks records refreshed!');
+        }
+
+        function generateMarksReport() {
+            const selectedClass = document.getElementById('summaryClass').value;
+            const selectedSubject = document.getElementById('summarySubject').value;
+            
+            let reportData = marksData;
+            
+            if (selectedClass) {
+                reportData = reportData.filter(record => record.class === selectedClass);
+            }
+            
+            if (selectedSubject) {
+                reportData = reportData.filter(record => record.subject === selectedSubject);
+            }
+            
+            if (reportData.length === 0) {
+                alert('No data available for the selected filters.');
+                return;
+            }
+            
+            const totalRecords = reportData.length;
+            const averageScore = Math.round(reportData.reduce((sum, record) => sum + record.percentage, 0) / totalRecords);
+            const highestScore = Math.max(...reportData.map(record => record.percentage));
+            const lowestScore = Math.min(...reportData.map(record => record.percentage));
+            const passingStudents = reportData.filter(record => record.percentage >= 40).length;
+            const passRate = Math.round((passingStudents / totalRecords) * 100);
+            
+            const filterText = `${selectedClass ? 'Class: ' + selectedClass : 'All Classes'}${selectedSubject ? ', Subject: ' + selectedSubject : ', All Subjects'}`;
+            
+            alert(`Marks Report (${filterText}):\n\nTotal Records: ${totalRecords}\nAverage Score: ${averageScore}%\nHighest Score: ${highestScore}%\nLowest Score: ${lowestScore}%\nPass Rate: ${passRate}%\n\nIn a real system, this would generate a downloadable PDF report.`);
+        }
+
+        // Search functionality
+        document.getElementById('searchMarks').addEventListener('input', function() {
+            loadMarksRecords();
+        });
+
+        // Student subject filter
+        if (document.getElementById('studentSubjectFilter')) {
+            document.getElementById('studentSubjectFilter').addEventListener('change', function() {
+                const selectedSubject = this.value;
+                const username = localStorage.getItem('username');
+                let studentMarks = marksData.filter(record => record.rollNumber === username);
+                
+                if (selectedSubject) {
+                    studentMarks = studentMarks.filter(record => record.subject === selectedSubject);
+                }
+                
+                displayStudentMarks(studentMarks);
+            });
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

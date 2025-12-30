@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Student Profile</p>
+            </div>
+            <div class="header-actions">
+                <a href="student-dashboard.html" class="btn btn-primary">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="student-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="student-profile.html" class="active"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                <li><a href="marks.html"><i class="fas fa-chart-line"></i> My Marks</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Profile Header -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-user"></i> My Profile</h2>
+                <button onclick="toggleEditMode()" id="editBtn" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+            
+            <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+                <!-- Profile Image Section -->
+                <div style="text-align: center; min-width: 200px;">
+                    <img id="profileImage" src="https://via.placeholder.com/150x150/3498db/ffffff?text=Student" 
+                         alt="Profile Picture" class="profile-image">
+                    <div id="imageUploadSection" style="display: none; margin-top: 1rem;">
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <button onclick="document.getElementById('imageUpload').click()" class="btn btn-success">
+                            <i class="fas fa-camera"></i> Change Photo
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Basic Info -->
+                <div style="flex: 1; min-width: 300px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="fullName" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> Roll Number</label>
+                            <input type="text" id="rollNumber" class="form-control" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-school"></i> Class</label>
+                            <input type="text" id="studentClass" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-layer-group"></i> Division</label>
+                            <input type="text" id="division" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h3><i class="fas fa-info-circle"></i> Personal Information</h3>
+            </div>
+            
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Date of Birth</label>
+                        <input type="date" id="dateOfBirth" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Gender</label>
+                        <select id="gender" class="form-control" disabled>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Department</label>
+                    <input type="text" id="department" class="form-control" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <textarea id="address" class="form-control" rows="3" readonly></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h3><i class="fas fa-phone"></i> Contact Information</h3>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Contact Number</label>
+                    <input type="tel" id="phone" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent/Guardian Information -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h3><i class="fas fa-users"></i> Parent/Guardian Information</h3>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-user-tie"></i> Parent/Guardian Name</label>
+                    <input type="text" id="parentName" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Parent Contact Number</label>
+                    <input type="tel" id="parentPhone" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Parent Email Address</label>
+                <input type="email" id="parentEmail" class="form-control" readonly>
+            </div>
+        </div>
+
+        <!-- Academic Information -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h3><i class="fas fa-graduation-cap"></i> Academic Information</h3>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-plus"></i> Registration Date</label>
+                    <input type="text" id="registrationDate" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-info-circle"></i> Status</label>
+                    <input type="text" id="status" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-percentage"></i> Overall Attendance</label>
+                    <input type="text" id="overallAttendance" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-trophy"></i> Current Grade</label>
+                    <input type="text" id="currentGrade" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card fade-in" id="actionButtons" style="display: none;">
+            <div style="text-align: center;">
+                <button onclick="saveProfile()" class="btn btn-success" style="margin: 0.5rem;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button onclick="cancelEdit()" class="btn btn-danger" style="margin: 0.5rem;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let isEditMode = false;
+        let originalData = {};
+
+        // Check if user is logged in and has student role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!isLoggedIn || userRole !== 'student') {
+                alert('Access denied! Please login as student.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            loadStudentProfile();
+        });
+
+        // Load student profile data
+        function loadStudentProfile() {
+            const username = localStorage.getItem('username');
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const currentStudent = students.find(s => s.rollNumber === username);
+            
+            if (currentStudent) {
+                populateProfile(currentStudent);
+            } else {
+                // Use demo data for demo login
+                const demoStudent = {
+                    fullName: 'John Doe',
+                    rollNumber: 'student123',
+                    class: '10',
+                    division: 'A',
+                    dateOfBirth: '2005-06-15',
+                    gender: 'male',
+                    department: 'Science',
+                    email: 'john.doe@email.com',
+                    phone: '123-456-7890',
+                    address: '123 Main Street, City, State 12345',
+                    parentName: 'Robert Doe',
+                    parentPhone: '123-456-7891',
+                    parentEmail: 'robert.doe@email.com',
+                    registrationDate: '2024-01-01',
+                    status: 'Active'
+                };
+                populateProfile(demoStudent);
+            }
+        }
+
+        function populateProfile(student) {
+            document.getElementById('fullName').value = student.fullName || '';
+            document.getElementById('rollNumber').value = student.rollNumber || '';
+            document.getElementById('studentClass').value = student.class || '';
+            document.getElementById('division').value = student.division || '';
+            document.getElementById('dateOfBirth').value = student.dateOfBirth || '';
+            document.getElementById('gender').value = student.gender || '';
+            document.getElementById('department').value = student.department || '';
+            document.getElementById('email').value = student.email || '';
+            document.getElementById('phone').value = student.phone || '';
+            document.getElementById('address').value = student.address || '';
+            document.getElementById('parentName').value = student.parentName || '';
+            document.getElementById('parentPhone').value = student.parentPhone || '';
+            document.getElementById('parentEmail').value = student.parentEmail || '';
+            document.getElementById('registrationDate').value = student.registrationDate || '';
+            document.getElementById('status').value = student.status || 'Active';
+            
+            // Calculate and display academic info
+            const attendance = Math.floor(Math.random() * 20) + 80; // 80-100%
+            const grades = ['A+', 'A', 'B+', 'B', 'C+'];
+            const grade = grades[Math.floor(Math.random() * grades.length)];
+            
+            document.getElementById('overallAttendance').value = attendance + '%';
+            document.getElementById('currentGrade').value = grade;
+            
+            // Store original data for cancel functionality
+            originalData = { ...student };
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const editBtn = document.getElementById('editBtn');
+            const actionButtons = document.getElementById('actionButtons');
+            const imageUploadSection = document.getElementById('imageUploadSection');
+            
+            // Get all form controls except readonly ones
+            const editableFields = [
+                'email', 'phone', 'address', 'parentEmail'
+            ];
+            
+            if (isEditMode) {
+                editBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Edit';
+                editBtn.className = 'btn btn-danger';
+                actionButtons.style.display = 'block';
+                imageUploadSection.style.display = 'block';
+                
+                // Enable editable fields
+                editableFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.readOnly = false;
+                        field.style.backgroundColor = '#fff';
+                        field.style.borderColor = '#3498db';
+                    }
+                });
+                
+            } else {
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+                editBtn.className = 'btn btn-primary';
+                actionButtons.style.display = 'none';
+                imageUploadSection.style.display = 'none';
+                
+                // Disable editable fields
+                editableFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.readOnly = true;
+                        field.style.backgroundColor = '#f8f9fa';
+                        field.style.borderColor = '#e0e0e0';
+                    }
+                });
+            }
+        }
+
+        function saveProfile() {
+            // Validate email
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('phone').value;
+            const phoneRegex = /^[0-9-]{10,}$/;
+            if (phone && !phoneRegex.test(phone.replace(/\D/g, ''))) {
+                alert('Please enter a valid phone number!');
+                return;
+            }
+            
+            // Get updated data
+            const updatedData = {
+                ...originalData,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                parentEmail: document.getElementById('parentEmail').value
+            };
+            
+            // Update in localStorage if student exists
+            const username = localStorage.getItem('username');
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const studentIndex = students.findIndex(s => s.rollNumber === username);
+            
+            if (studentIndex !== -1) {
+                students[studentIndex] = updatedData;
+                localStorage.setItem('students', JSON.stringify(students));
+            }
+            
+            // Show success message
+            alert('Profile updated successfully!');
+            
+            // Exit edit mode
+            toggleEditMode();
+            
+            // Update original data
+            originalData = { ...updatedData };
+        }
+
+        function cancelEdit() {
+            if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
+                // Restore original data
+                populateProfile(originalData);
+                toggleEditMode();
+            }
+        }
+
+        // Image upload functionality
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    alert('File size should be less than 5MB!');
+                    return;
+                }
+                
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file!');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function() {
+            if (!this.readOnly) {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length >= 6) {
+                    value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                } else if (value.length >= 3) {
+                    value = value.replace(/(\d{3})(\d{3})/, '$1-$2');
+                }
+                this.value = value;
+            }
+        });
+
+        // Add visual feedback for editable fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const editableFields = ['email', 'phone', 'address', 'parentEmail'];
+            
+            editableFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('focus', function() {
+                        if (!this.readOnly) {
+                            this.style.boxShadow = '0 0 0 3px rgba(52, 152, 219, 0.2)';
+                        }
+                    });
+                    
+                    field.addEventListener('blur', function() {
+                        this.style.boxShadow = 'none';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

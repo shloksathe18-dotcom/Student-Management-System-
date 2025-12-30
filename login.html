@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Student Management System</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="student-registration.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                <li><a href="login.html" class="active"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="login-container">
+            <div class="login-card fade-in">
+                <div class="login-header">
+                    <h2><i class="fas fa-sign-in-alt"></i> System Login</h2>
+                    <p>Select your role and enter credentials</p>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="role-selector">
+                    <button type="button" class="role-btn active" data-role="student">
+                        <i class="fas fa-user-graduate"></i><br>Student
+                    </button>
+                    <button type="button" class="role-btn" data-role="teacher">
+                        <i class="fas fa-chalkboard-teacher"></i><br>Teacher
+                    </button>
+                    <button type="button" class="role-btn" data-role="admin">
+                        <i class="fas fa-user-shield"></i><br>Admin
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Username/Roll Number
+                        </label>
+                        <input type="text" id="username" class="form-control" required 
+                               placeholder="Enter your username or roll number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" id="password" class="form-control" required 
+                               placeholder="Enter your password">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Demo Credentials -->
+                <div class="alert alert-success" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-info-circle"></i> Demo Credentials:</h4>
+                    <p><strong>Student:</strong> student123 / password123</p>
+                    <p><strong>Teacher:</strong> teacher123 / password123</p>
+                    <p><strong>Admin:</strong> admin123 / password123</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <p>Don't have an account?</p>
+                    <a href="student-registration.html" class="btn btn-success" style="margin-top: 0.5rem;">
+                        <i class="fas fa-user-plus"></i> Register as Student
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Role selection functionality
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update placeholder text based on role
+                const role = this.dataset.role;
+                const usernameInput = document.getElementById('username');
+                
+                if (role === 'student') {
+                    usernameInput.placeholder = 'Enter your roll number';
+                } else {
+                    usernameInput.placeholder = 'Enter your username';
+                }
+            });
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const selectedRole = document.querySelector('.role-btn.active').dataset.role;
+            
+            // Basic validation
+            if (!username || !password) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            // Demo authentication
+            const validCredentials = {
+                student: { username: 'student123', password: 'password123' },
+                teacher: { username: 'teacher123', password: 'password123' },
+                admin: { username: 'admin123', password: 'password123' }
+            };
+            
+            if (validCredentials[selectedRole].username === username && 
+                validCredentials[selectedRole].password === password) {
+                
+                // Store login info in localStorage
+                localStorage.setItem('userRole', selectedRole);
+                localStorage.setItem('username', username);
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Show success message
+                alert(`Welcome! Redirecting to ${selectedRole} dashboard...`);
+                
+                // Redirect based on role
+                setTimeout(() => {
+                    switch(selectedRole) {
+                        case 'student':
+                            window.location.href = 'student-dashboard.html';
+                            break;
+                        case 'teacher':
+                            window.location.href = 'teacher-dashboard.html';
+                            break;
+                        case 'admin':
+                            window.location.href = 'admin-dashboard.html';
+                            break;
+                    }
+                }, 1000);
+                
+            } else {
+                alert('Invalid credentials! Please check your username and password.');
+                // Clear password field
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Add loading animation to login button
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Add enter key support for form submission
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Add focus effects to form inputs
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.2s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

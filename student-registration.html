@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Student Management System</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="student-registration.html" class="active"><i class="fas fa-user-plus"></i> Register</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-user-plus"></i> Student Registration</h2>
+                <p>Fill in all the required information to register a new student</p>
+            </div>
+            
+            <form id="registrationForm">
+                <!-- Personal Information -->
+                <div class="card-header" style="border-bottom: 1px solid #e0e0e0; margin: 2rem 0 1rem 0;">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">
+                            <i class="fas fa-user"></i> Full Name *
+                        </label>
+                        <input type="text" id="fullName" class="form-control" required 
+                               placeholder="Enter full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rollNumber">
+                            <i class="fas fa-id-card"></i> Roll Number *
+                        </label>
+                        <input type="text" id="rollNumber" class="form-control" required 
+                               placeholder="Enter roll number">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateOfBirth">
+                            <i class="fas fa-calendar"></i> Date of Birth *
+                        </label>
+                        <input type="date" id="dateOfBirth" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">
+                            <i class="fas fa-venus-mars"></i> Gender *
+                        </label>
+                        <select id="gender" class="form-control" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="card-header" style="border-bottom: 1px solid #e0e0e0; margin: 2rem 0 1rem 0;">
+                    <h3><i class="fas fa-graduation-cap"></i> Academic Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="class">
+                            <i class="fas fa-school"></i> Class *
+                        </label>
+                        <select id="class" class="form-control" required>
+                            <option value="">Select Class</option>
+                            <option value="1">Class 1</option>
+                            <option value="2">Class 2</option>
+                            <option value="3">Class 3</option>
+                            <option value="4">Class 4</option>
+                            <option value="5">Class 5</option>
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="division">
+                            <i class="fas fa-layer-group"></i> Division *
+                        </label>
+                        <select id="division" class="form-control" required>
+                            <option value="">Select Division</option>
+                            <option value="A">Division A</option>
+                            <option value="B">Division B</option>
+                            <option value="C">Division C</option>
+                            <option value="D">Division D</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="department">
+                        <i class="fas fa-building"></i> Department
+                    </label>
+                    <select id="department" class="form-control">
+                        <option value="">Select Department (Optional)</option>
+                        <option value="science">Science</option>
+                        <option value="commerce">Commerce</option>
+                        <option value="arts">Arts</option>
+                        <option value="computer">Computer Science</option>
+                        <option value="mathematics">Mathematics</option>
+                    </select>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="card-header" style="border-bottom: 1px solid #e0e0e0; margin: 2rem 0 1rem 0;">
+                    <h3><i class="fas fa-phone"></i> Contact Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> Email Address *
+                        </label>
+                        <input type="email" id="email" class="form-control" required 
+                               placeholder="Enter email address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">
+                            <i class="fas fa-phone"></i> Contact Number *
+                        </label>
+                        <input type="tel" id="phone" class="form-control" required 
+                               placeholder="Enter contact number">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </label>
+                    <textarea id="address" class="form-control" rows="3" 
+                              placeholder="Enter complete address"></textarea>
+                </div>
+
+                <!-- Parent/Guardian Information -->
+                <div class="card-header" style="border-bottom: 1px solid #e0e0e0; margin: 2rem 0 1rem 0;">
+                    <h3><i class="fas fa-users"></i> Parent/Guardian Information</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parentName">
+                            <i class="fas fa-user-tie"></i> Parent/Guardian Name *
+                        </label>
+                        <input type="text" id="parentName" class="form-control" required 
+                               placeholder="Enter parent/guardian name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="parentPhone">
+                            <i class="fas fa-phone"></i> Parent Contact Number *
+                        </label>
+                        <input type="tel" id="parentPhone" class="form-control" required 
+                               placeholder="Enter parent contact number">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="parentEmail">
+                        <i class="fas fa-envelope"></i> Parent Email Address
+                    </label>
+                    <input type="email" id="parentEmail" class="form-control" 
+                           placeholder="Enter parent email address">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group" style="text-align: center; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-success" style="padding: 1rem 3rem;">
+                        <i class="fas fa-user-plus"></i> Register Student
+                    </button>
+                    <button type="reset" class="btn btn-danger" style="padding: 1rem 3rem; margin-left: 1rem;">
+                        <i class="fas fa-undo"></i> Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Form validation and submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                rollNumber: document.getElementById('rollNumber').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                gender: document.getElementById('gender').value,
+                class: document.getElementById('class').value,
+                division: document.getElementById('division').value,
+                department: document.getElementById('department').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                parentName: document.getElementById('parentName').value,
+                parentPhone: document.getElementById('parentPhone').value,
+                parentEmail: document.getElementById('parentEmail').value
+            };
+            
+            // Validate required fields
+            const requiredFields = ['fullName', 'rollNumber', 'dateOfBirth', 'gender', 'class', 'division', 'email', 'phone', 'parentName', 'parentPhone'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!formData[field]) {
+                    element.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    element.style.borderColor = '#27ae60';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                alert('Please enter a valid email address!');
+                document.getElementById('email').style.borderColor = '#e74c3c';
+                return;
+            }
+            
+            // Validate phone number (basic validation)
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+                alert('Please enter a valid 10-digit phone number!');
+                document.getElementById('phone').style.borderColor = '#e74c3c';
+                return;
+            }
+            
+            // Validate roll number uniqueness (simulate)
+            const existingRollNumbers = ['STU001', 'STU002', 'STU003']; // Simulated existing roll numbers
+            if (existingRollNumbers.includes(formData.rollNumber.toUpperCase())) {
+                alert('Roll number already exists! Please choose a different roll number.');
+                document.getElementById('rollNumber').style.borderColor = '#e74c3c';
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+            submitBtn.disabled = true;
+            
+            // Simulate registration process
+            setTimeout(() => {
+                // Store student data in localStorage (simulate database)
+                const students = JSON.parse(localStorage.getItem('students') || '[]');
+                const newStudent = {
+                    id: Date.now(),
+                    ...formData,
+                    registrationDate: new Date().toISOString().split('T')[0],
+                    status: 'active'
+                };
+                students.push(newStudent);
+                localStorage.setItem('students', JSON.stringify(students));
+                
+                // Show success message
+                alert(`Student registered successfully!\n\nStudent Details:\nName: ${formData.fullName}\nRoll Number: ${formData.rollNumber}\nClass: ${formData.class}-${formData.division}\n\nYou can now login using roll number: ${formData.rollNumber} and password: password123`);
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Reset field colors
+                document.querySelectorAll('.form-control').forEach(field => {
+                    field.style.borderColor = '#e0e0e0';
+                });
+                
+                // Redirect to login page
+                setTimeout(() => {
+                    if (confirm('Would you like to go to the login page now?')) {
+                        window.location.href = 'login.html';
+                    }
+                }, 2000);
+                
+            }, 2000);
+        });
+        
+        // Auto-generate roll number based on class and division
+        document.getElementById('class').addEventListener('change', generateRollNumber);
+        document.getElementById('division').addEventListener('change', generateRollNumber);
+        
+        function generateRollNumber() {
+            const classValue = document.getElementById('class').value;
+            const divisionValue = document.getElementById('division').value;
+            
+            if (classValue && divisionValue) {
+                const timestamp = Date.now().toString().slice(-4);
+                const rollNumber = `${classValue}${divisionValue}${timestamp}`;
+                document.getElementById('rollNumber').value = rollNumber;
+            }
+        }
+        
+        // Real-time validation
+        document.querySelectorAll('.form-control').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.style.borderColor === 'rgb(231, 76, 60)') { // #e74c3c in rgb
+                    this.style.borderColor = '#e0e0e0';
+                }
+            });
+        });
+        
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '$1-$2');
+            }
+            this.value = value;
+        });
+        
+        document.getElementById('parentPhone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '$1-$2');
+            }
+            this.value = value;
+        });
+        
+        // Form reset confirmation
+        document.querySelector('button[type="reset"]').addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                e.preventDefault();
+            } else {
+                // Reset field colors
+                document.querySelectorAll('.form-control').forEach(field => {
+                    field.style.borderColor = '#e0e0e0';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

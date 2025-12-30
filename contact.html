@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Contact & Support</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="student-registration.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                <li><a href="contact.html" class="active"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Contact Information -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-info-circle"></i> Contact Information</h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Address</h3>
+                    <p>123 Education Street<br>
+                    Knowledge City, KC 12345<br>
+                    United States</p>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Phone Numbers</h3>
+                    <p><strong>Main Office:</strong> (555) 123-4567<br>
+                    <strong>Admissions:</strong> (555) 123-4568<br>
+                    <strong>Emergency:</strong> (555) 123-4569</p>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Addresses</h3>
+                    <p><strong>General:</strong> info@edumanage.edu<br>
+                    <strong>Admissions:</strong> admissions@edumanage.edu<br>
+                    <strong>Support:</strong> support@edumanage.edu</p>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Office Hours</h3>
+                    <p><strong>Monday - Friday:</strong> 8:00 AM - 6:00 PM<br>
+                    <strong>Saturday:</strong> 9:00 AM - 2:00 PM<br>
+                    <strong>Sunday:</strong> Closed</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-paper-plane"></i> Send us a Message</h2>
+                <p>Have a question or need assistance? Fill out the form below and we'll get back to you soon.</p>
+            </div>
+            
+            <form id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactName">
+                            <i class="fas fa-user"></i> Full Name *
+                        </label>
+                        <input type="text" id="contactName" class="form-control" required 
+                               placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">
+                            <i class="fas fa-envelope"></i> Email Address *
+                        </label>
+                        <input type="email" id="contactEmail" class="form-control" required 
+                               placeholder="Enter your email address">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactPhone">
+                            <i class="fas fa-phone"></i> Phone Number
+                        </label>
+                        <input type="tel" id="contactPhone" class="form-control" 
+                               placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactSubject">
+                            <i class="fas fa-tag"></i> Subject *
+                        </label>
+                        <select id="contactSubject" class="form-control" required>
+                            <option value="">Select Subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="admission">Admission Information</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="academic">Academic Support</option>
+                            <option value="billing">Billing & Fees</option>
+                            <option value="complaint">Complaint</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactMessage">
+                        <i class="fas fa-comment"></i> Message *
+                    </label>
+                    <textarea id="contactMessage" class="form-control" rows="6" required 
+                              placeholder="Enter your message here..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="contactConsent" required>
+                        I agree to the <a href="#" onclick="showPrivacyPolicy()">Privacy Policy</a> and consent to being contacted regarding my inquiry.
+                    </label>
+                </div>
+                
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-success" style="padding: 1rem 3rem;">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                    <button type="reset" class="btn btn-danger" style="padding: 1rem 3rem; margin-left: 1rem;">
+                        <i class="fas fa-undo"></i> Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Department Contacts -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-users"></i> Department Contacts</h2>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Office Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Administration</strong></td>
+                            <td>Dr. Sarah Johnson<br><small>Principal</small></td>
+                            <td>principal@edumanage.edu</td>
+                            <td>(555) 123-4570</td>
+                            <td>Mon-Fri: 9:00 AM - 5:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Admissions</strong></td>
+                            <td>Mr. Michael Brown<br><small>Admissions Officer</small></td>
+                            <td>admissions@edumanage.edu</td>
+                            <td>(555) 123-4568</td>
+                            <td>Mon-Fri: 8:00 AM - 6:00 PM<br>Sat: 9:00 AM - 2:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Academic Affairs</strong></td>
+                            <td>Prof. Emily Davis<br><small>Academic Coordinator</small></td>
+                            <td>academic@edumanage.edu</td>
+                            <td>(555) 123-4571</td>
+                            <td>Mon-Fri: 10:00 AM - 4:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Student Services</strong></td>
+                            <td>Ms. Lisa Wilson<br><small>Student Counselor</small></td>
+                            <td>students@edumanage.edu</td>
+                            <td>(555) 123-4572</td>
+                            <td>Mon-Fri: 8:30 AM - 5:30 PM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IT Support</strong></td>
+                            <td>Mr. David Miller<br><small>IT Manager</small></td>
+                            <td>support@edumanage.edu</td>
+                            <td>(555) 123-4573</td>
+                            <td>Mon-Fri: 8:00 AM - 6:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Finance</strong></td>
+                            <td>Mrs. Jennifer Taylor<br><small>Finance Officer</small></td>
+                            <td>finance@edumanage.edu</td>
+                            <td>(555) 123-4574</td>
+                            <td>Mon-Fri: 9:00 AM - 5:00 PM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            </div>
+            
+            <div id="faqAccordion">
+                <div class="faq-item" style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="faq-question" onclick="toggleFAQ(1)" style="padding: 1rem; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>How do I register as a new student?</strong>
+                        <i class="fas fa-chevron-down" id="faq-icon-1"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-1" style="display: none; padding: 1rem;">
+                        <p>To register as a new student, visit our <a href="student-registration.html">Student Registration</a> page and fill out the complete form with your personal, academic, and contact information. After submission, you'll receive a confirmation email with your login credentials.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="faq-question" onclick="toggleFAQ(2)" style="padding: 1rem; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>How can I check my attendance and marks?</strong>
+                        <i class="fas fa-chevron-down" id="faq-icon-2"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-2" style="display: none; padding: 1rem;">
+                        <p>After logging in to your student account, you can access your attendance records and marks from the dashboard. Navigate to the "Attendance" or "My Marks" sections to view detailed reports of your academic progress.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="faq-question" onclick="toggleFAQ(3)" style="padding: 1rem; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>What should I do if I forget my login password?</strong>
+                        <i class="fas fa-chevron-down" id="faq-icon-3"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-3" style="display: none; padding: 1rem;">
+                        <p>If you forget your password, contact the IT Support department at support@edumanage.edu or call (555) 123-4573. They will help you reset your password and regain access to your account.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="faq-question" onclick="toggleFAQ(4)" style="padding: 1rem; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>How can parents access their child's academic information?</strong>
+                        <i class="fas fa-chevron-down" id="faq-icon-4"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-4" style="display: none; padding: 1rem;">
+                        <p>Parents can request access to their child's academic information by contacting the Student Services department. We provide regular progress reports and can arrange parent-teacher meetings to discuss academic performance.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 8px;">
+                    <div class="faq-question" onclick="toggleFAQ(5)" style="padding: 1rem; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>What are the system requirements for accessing the portal?</strong>
+                        <i class="fas fa-chevron-down" id="faq-icon-5"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-5" style="display: none; padding: 1rem;">
+                        <p>The EduManage system works on any modern web browser (Chrome, Firefox, Safari, Edge) with internet connectivity. It's responsive and works on desktop computers, tablets, and mobile devices. No additional software installation is required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media & Links -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-share-alt"></i> Connect With Us</h2>
+            </div>
+            
+            <div style="text-align: center;">
+                <p style="margin-bottom: 2rem;">Follow us on social media for updates and announcements:</p>
+                
+                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                    <a href="#" class="btn btn-primary" style="padding: 1rem 2rem;">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <a href="#" class="btn btn-primary" style="padding: 1rem 2rem; background: #1da1f2;">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="#" class="btn btn-primary" style="padding: 1rem 2rem; background: #0077b5;">
+                        <i class="fab fa-linkedin-in"></i> LinkedIn
+                    </a>
+                    <a href="#" class="btn btn-primary" style="padding: 1rem 2rem; background: #e4405f;">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <p><strong>Website:</strong> <a href="https://www.edumanage.edu">www.edumanage.edu</a></p>
+                    <p><strong>Student Portal:</strong> <a href="login.html">Login Here</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+            <p>For technical support, email: support@edumanage.edu | Phone: (555) 123-4573</p>
+        </div>
+    </footer>
+
+    <script>
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                subject: document.getElementById('contactSubject').value,
+                message: document.getElementById('contactMessage').value,
+                consent: document.getElementById('contactConsent').checked
+            };
+            
+            // Validate required fields
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            
+            // Validate consent
+            if (!formData.consent) {
+                alert('Please agree to the privacy policy to continue.');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate sending message
+            setTimeout(() => {
+                // Store message in localStorage (simulate database)
+                const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+                const newMessage = {
+                    id: Date.now(),
+                    ...formData,
+                    timestamp: new Date().toISOString(),
+                    status: 'received'
+                };
+                messages.push(newMessage);
+                localStorage.setItem('contactMessages', JSON.stringify(messages));
+                
+                // Show success message
+                alert(`Thank you, ${formData.name}!\n\nYour message has been sent successfully. We'll get back to you within 24-48 hours.\n\nReference ID: MSG${newMessage.id}`);
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+            }, 2000);
+        });
+        
+        // FAQ toggle functionality
+        function toggleFAQ(faqNumber) {
+            const answer = document.getElementById(`faq-answer-${faqNumber}`);
+            const icon = document.getElementById(`faq-icon-${faqNumber}`);
+            
+            if (answer.style.display === 'none' || answer.style.display === '') {
+                answer.style.display = 'block';
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                answer.style.display = 'none';
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+        
+        // Phone number formatting
+        document.getElementById('contactPhone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '($1) $2');
+            }
+            this.value = value;
+        });
+        
+        // Form validation styling
+        document.querySelectorAll('.form-control').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.style.borderColor === 'rgb(231, 76, 60)') { // #e74c3c in rgb
+                    this.style.borderColor = '#e0e0e0';
+                }
+            });
+        });
+        
+        // Privacy policy modal
+        function showPrivacyPolicy() {
+            alert('Privacy Policy:\n\n• We collect only necessary information for communication purposes\n• Your data is kept secure and not shared with third parties\n• We may contact you regarding your inquiry\n• You can request data deletion at any time\n• For full privacy policy, contact us at privacy@edumanage.edu');
+        }
+        
+        // Form reset confirmation
+        document.querySelector('button[type="reset"]').addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                e.preventDefault();
+            } else {
+                // Reset field colors
+                document.querySelectorAll('.form-control').forEach(field => {
+                    field.style.borderColor = '#e0e0e0';
+                });
+            }
+        });
+        
+        // Auto-resize textarea
+        document.getElementById('contactMessage').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+        
+        // Add animation to cards on scroll
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardVisible = 150;
+                
+                if (cardTop < window.innerHeight - cardVisible) {
+                    card.classList.add('fade-in');
+                }
+            });
+        });
+        
+        // Add hover effects to department contact rows
+        document.querySelectorAll('.table tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.transform = 'scale(1.01)';
+                this.style.transition = 'all 0.2s ease';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

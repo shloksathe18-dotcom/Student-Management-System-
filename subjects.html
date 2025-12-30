@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects Management - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Subjects Management</p>
+            </div>
+            <div class="header-actions">
+                <span style="margin-right: 1rem; color: white;">
+                    <i class="fas fa-user"></i> <span id="userWelcome">Welcome</span>
+                </span>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu" id="navMenu">
+                <!-- Navigation will be populated based on user role -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Add Subject Form (Admin only) -->
+        <div class="card fade-in" id="addSubjectForm" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-plus"></i> Add New Subject</h2>
+            </div>
+            
+            <form id="subjectForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subjectName">
+                            <i class="fas fa-book"></i> Subject Name *
+                        </label>
+                        <input type="text" id="subjectName" class="form-control" required 
+                               placeholder="Enter subject name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectCode">
+                            <i class="fas fa-code"></i> Subject Code *
+                        </label>
+                        <input type="text" id="subjectCode" class="form-control" required 
+                               placeholder="Enter subject code (e.g., MATH101)">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subjectClass">
+                            <i class="fas fa-school"></i> Class *
+                        </label>
+                        <select id="subjectClass" class="form-control" required>
+                            <option value="">Select Class</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subjectCredits">
+                            <i class="fas fa-star"></i> Credits
+                        </label>
+                        <input type="number" id="subjectCredits" class="form-control" 
+                               placeholder="Enter credits" min="1" max="10">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectDescription">
+                        <i class="fas fa-align-left"></i> Description
+                    </label>
+                    <textarea id="subjectDescription" class="form-control" rows="3" 
+                              placeholder="Enter subject description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectTeacher">
+                        <i class="fas fa-chalkboard-teacher"></i> Assigned Teacher
+                    </label>
+                    <select id="subjectTeacher" class="form-control">
+                        <option value="">Select Teacher</option>
+                        <option value="Mr. Johnson">Mr. Johnson</option>
+                        <option value="Dr. Smith">Dr. Smith</option>
+                        <option value="Ms. Davis">Ms. Davis</option>
+                        <option value="Mrs. Wilson">Mrs. Wilson</option>
+                        <option value="Prof. Brown">Prof. Brown</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Add Subject
+                    </button>
+                    <button type="reset" class="btn btn-danger" style="margin-left: 1rem;">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Subjects Overview -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> Subjects Overview</h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Total Subjects</h3>
+                    <p id="totalSubjects">0</p>
+                    <small>Available subjects</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Active Teachers</h3>
+                    <p id="activeTeachers">5</p>
+                    <small>Teaching faculty</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h3>Classes Covered</h3>
+                    <p id="classesCovered">3</p>
+                    <small>Class 10, 11, 12</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Total Credits</h3>
+                    <p id="totalCredits">0</p>
+                    <small>Credit hours</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects by Class -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-layer-group"></i> Subjects by Class</h2>
+                <div>
+                    <select id="classFilter" class="form-control" style="max-width: 200px; display: inline-block; margin-right: 1rem;">
+                        <option value="">All Classes</option>
+                        <option value="10">Class 10</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                    <button onclick="refreshSubjects()" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div id="subjectsByClass">
+                <!-- Class 10 Subjects -->
+                <div class="class-subjects">
+                    <h3 style="color: #3498db; margin: 2rem 0 1rem 0;">
+                        <i class="fas fa-graduation-cap"></i> Class 10 Subjects
+                    </h3>
+                    <div class="dashboard-grid" id="class10Subjects">
+                        <!-- Subjects will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Class 11 Subjects -->
+                <div class="class-subjects">
+                    <h3 style="color: #27ae60; margin: 2rem 0 1rem 0;">
+                        <i class="fas fa-graduation-cap"></i> Class 11 Subjects
+                    </h3>
+                    <div class="dashboard-grid" id="class11Subjects">
+                        <!-- Subjects will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Class 12 Subjects -->
+                <div class="class-subjects">
+                    <h3 style="color: #e74c3c; margin: 2rem 0 1rem 0;">
+                        <i class="fas fa-graduation-cap"></i> Class 12 Subjects
+                    </h3>
+                    <div class="dashboard-grid" id="class12Subjects">
+                        <!-- Subjects will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Subjects Table -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-list"></i> All Subjects</h2>
+                <div>
+                    <input type="text" id="searchSubjects" placeholder="Search subjects..." 
+                           class="form-control" style="max-width: 300px; display: inline-block; margin-right: 1rem;">
+                    <button onclick="exportSubjects()" class="btn btn-success">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Class</th>
+                            <th>Credits</th>
+                            <th>Teacher</th>
+                            <th>Status</th>
+                            <th id="subjectActionsHeader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsTable">
+                        <!-- Subjects will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- My Subjects (Student/Teacher view) -->
+        <div class="card fade-in" id="mySubjects" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-user-graduate"></i> <span id="mySubjectsTitle">My Subjects</span></h2>
+            </div>
+            
+            <div class="dashboard-grid" id="personalSubjects">
+                <!-- Personal subjects will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Subject Details Modal (for viewing) -->
+        <div id="subjectModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 15px; max-width: 500px; width: 90%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 id="modalSubjectName">Subject Details</h3>
+                    <button onclick="closeSubjectModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                </div>
+                <div id="modalSubjectContent">
+                    <!-- Subject details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentUserRole = '';
+        let subjectsData = [];
+
+        // Initialize page based on user role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (!isLoggedIn) {
+                alert('Please login to access this page.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUserRole = userRole;
+            setupPageForRole(userRole, username);
+            loadSubjectsData();
+        });
+
+        function setupPageForRole(role, username) {
+            const navMenu = document.getElementById('navMenu');
+            const userWelcome = document.getElementById('userWelcome');
+            const addSubjectForm = document.getElementById('addSubjectForm');
+            const mySubjects = document.getElementById('mySubjects');
+            const subjectActionsHeader = document.getElementById('subjectActionsHeader');
+            const mySubjectsTitle = document.getElementById('mySubjectsTitle');
+            
+            // Setup navigation based on role
+            if (role === 'admin') {
+                navMenu.innerHTML = `
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-registration.html"><i class="fas fa-user-plus"></i> Add Student</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html" class="active"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin';
+                addSubjectForm.style.display = 'block';
+                
+            } else if (role === 'teacher') {
+                navMenu.innerHTML = `
+                    <li><a href="teacher-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html" class="active"><i class="fas fa-book"></i> My Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> Welcome, Teacher';
+                mySubjects.style.display = 'block';
+                mySubjectsTitle.textContent = 'My Teaching Subjects';
+                
+            } else if (role === 'student') {
+                navMenu.innerHTML = `
+                    <li><a href="student-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> My Marks</a></li>
+                    <li><a href="subjects.html" class="active"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-graduate"></i> Welcome, Student';
+                mySubjects.style.display = 'block';
+                mySubjectsTitle.textContent = 'My Enrolled Subjects';
+                subjectActionsHeader.style.display = 'none';
+            }
+        }
+
+        function loadSubjectsData() {
+            // Load or generate sample subjects data
+            subjectsData = JSON.parse(localStorage.getItem('subjectsData') || '[]');
+            
+            if (subjectsData.length === 0) {
+                generateSampleSubjectsData();
+            }
+            
+            updateSubjectsOverview();
+            loadSubjectsByClass();
+            loadAllSubjectsTable();
+            
+            if (currentUserRole === 'student' || currentUserRole === 'teacher') {
+                loadPersonalSubjects();
+            }
+        }
+
+        function generateSampleSubjectsData() {
+            const sampleSubjects = [
+                // Class 10
+                { code: 'MATH10', name: 'Mathematics', class: '10', credits: 4, teacher: 'Mr. Johnson', description: 'Algebra, Geometry, and Trigonometry', status: 'Active' },
+                { code: 'ENG10', name: 'English', class: '10', credits: 3, teacher: 'Mrs. Wilson', description: 'Literature and Language Skills', status: 'Active' },
+                { code: 'SCI10', name: 'Science', class: '10', credits: 4, teacher: 'Dr. Smith', description: 'Physics, Chemistry, and Biology basics', status: 'Active' },
+                { code: 'SS10', name: 'Social Studies', class: '10', credits: 3, teacher: 'Ms. Davis', description: 'History and Geography', status: 'Active' },
+                
+                // Class 11
+                { code: 'MATH11', name: 'Mathematics', class: '11', credits: 4, teacher: 'Mr. Johnson', description: 'Advanced Algebra and Calculus', status: 'Active' },
+                { code: 'PHYS11', name: 'Physics', class: '11', credits: 4, teacher: 'Dr. Smith', description: 'Mechanics and Thermodynamics', status: 'Active' },
+                { code: 'CHEM11', name: 'Chemistry', class: '11', credits: 4, teacher: 'Ms. Davis', description: 'Organic and Inorganic Chemistry', status: 'Active' },
+                { code: 'ENG11', name: 'English', class: '11', credits: 3, teacher: 'Mrs. Wilson', description: 'Advanced Literature and Writing', status: 'Active' },
+                { code: 'BIO11', name: 'Biology', class: '11', credits: 4, teacher: 'Prof. Brown', description: 'Cell Biology and Genetics', status: 'Active' },
+                
+                // Class 12
+                { code: 'MATH12', name: 'Mathematics', class: '12', credits: 4, teacher: 'Mr. Johnson', description: 'Calculus and Statistics', status: 'Active' },
+                { code: 'PHYS12', name: 'Physics', class: '12', credits: 4, teacher: 'Dr. Smith', description: 'Electromagnetism and Modern Physics', status: 'Active' },
+                { code: 'CHEM12', name: 'Chemistry', class: '12', credits: 4, teacher: 'Ms. Davis', description: 'Physical Chemistry and Applications', status: 'Active' },
+                { code: 'ENG12', name: 'English', class: '12', credits: 3, teacher: 'Mrs. Wilson', description: 'Advanced Communication Skills', status: 'Active' },
+                { code: 'BIO12', name: 'Biology', class: '12', credits: 4, teacher: 'Prof. Brown', description: 'Ecology and Evolution', status: 'Active' }
+            ];
+            
+            subjectsData = sampleSubjects.map((subject, index) => ({
+                id: Date.now() + index,
+                ...subject
+            }));
+            
+            localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
+        }
+
+        function updateSubjectsOverview() {
+            const totalSubjects = subjectsData.length;
+            const totalCredits = subjectsData.reduce((sum, subject) => sum + (subject.credits || 0), 0);
+            const uniqueTeachers = new Set(subjectsData.map(subject => subject.teacher).filter(teacher => teacher)).size;
+            
+            document.getElementById('totalSubjects').textContent = totalSubjects;
+            document.getElementById('totalCredits').textContent = totalCredits;
+            document.getElementById('activeTeachers').textContent = uniqueTeachers;
+        }
+
+        function loadSubjectsByClass() {
+            const classes = ['10', '11', '12'];
+            
+            classes.forEach(classNum => {
+                const classSubjects = subjectsData.filter(subject => subject.class === classNum);
+                const container = document.getElementById(`class${classNum}Subjects`);
+                
+                if (classSubjects.length === 0) {
+                    container.innerHTML = `
+                        <div class="dashboard-card" style="grid-column: 1 / -1;">
+                            <div class="icon" style="color: #ccc;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>No subjects available</h3>
+                            <p>No subjects found for Class ${classNum}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = classSubjects.map(subject => `
+                    <div class="dashboard-card" onclick="viewSubjectDetails('${subject.id}')">
+                        <div class="icon" style="color: ${getSubjectColor(subject.name)};">
+                            <i class="fas fa-${getSubjectIcon(subject.name)}"></i>
+                        </div>
+                        <h3>${subject.name}</h3>
+                        <p><strong>${subject.code}</strong></p>
+                        <small>${subject.credits} Credits • ${subject.teacher}</small>
+                        ${currentUserRole === 'admin' ? `
+                            <div style="margin-top: 1rem;">
+                                <button onclick="event.stopPropagation(); editSubject('${subject.id}')" class="btn btn-primary" style="padding: 0.5rem; margin: 0.2rem;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); deleteSubject('${subject.id}')" class="btn btn-danger" style="padding: 0.5rem; margin: 0.2rem;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            });
+        }
+
+        function loadAllSubjectsTable() {
+            const tableBody = document.getElementById('subjectsTable');
+            const searchTerm = document.getElementById('searchSubjects').value.toLowerCase();
+            const classFilter = document.getElementById('classFilter').value;
+            
+            let filteredData = subjectsData;
+            
+            if (searchTerm) {
+                filteredData = filteredData.filter(subject => 
+                    subject.name.toLowerCase().includes(searchTerm) ||
+                    subject.code.toLowerCase().includes(searchTerm) ||
+                    (subject.teacher && subject.teacher.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (classFilter) {
+                filteredData = filteredData.filter(subject => subject.class === classFilter);
+            }
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-book" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <p>No subjects found.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = filteredData.map(subject => `
+                <tr>
+                    <td><strong>${subject.code}</strong></td>
+                    <td>${subject.name}</td>
+                    <td>Class ${subject.class}</td>
+                    <td>${subject.credits || '-'}</td>
+                    <td>${subject.teacher || 'Not Assigned'}</td>
+                    <td>
+                        <span class="badge" style="background: ${subject.status === 'Active' ? '#27ae60' : '#95a5a6'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">
+                            ${subject.status}
+                        </span>
+                    </td>
+                    <td ${currentUserRole === 'student' ? 'style="display: none;"' : ''}>
+                        ${currentUserRole !== 'student' ? `
+                            <button onclick="viewSubjectDetails('${subject.id}')" class="btn btn-primary" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${currentUserRole === 'admin' ? `
+                                <button onclick="editSubject('${subject.id}')" class="btn btn-success" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteSubject('${subject.id}')" class="btn btn-danger" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadPersonalSubjects() {
+            const container = document.getElementById('personalSubjects');
+            let personalSubjects = [];
+            
+            if (currentUserRole === 'teacher') {
+                // Show subjects taught by this teacher
+                personalSubjects = subjectsData.filter(subject => 
+                    subject.teacher === 'Mr. Johnson' || 
+                    subject.teacher === 'Dr. Smith' || 
+                    subject.teacher === 'Ms. Davis'
+                ).slice(0, 6); // Limit for demo
+            } else if (currentUserRole === 'student') {
+                // Show subjects for student's class (demo: Class 10)
+                personalSubjects = subjectsData.filter(subject => subject.class === '10');
+            }
+            
+            if (personalSubjects.length === 0) {
+                container.innerHTML = `
+                    <div class="dashboard-card" style="grid-column: 1 / -1;">
+                        <div class="icon" style="color: #ccc;">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>No subjects assigned</h3>
+                        <p>No subjects found for your profile</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = personalSubjects.map(subject => `
+                <div class="dashboard-card" onclick="viewSubjectDetails('${subject.id}')">
+                    <div class="icon" style="color: ${getSubjectColor(subject.name)};">
+                        <i class="fas fa-${getSubjectIcon(subject.name)}"></i>
+                    </div>
+                    <h3>${subject.name}</h3>
+                    <p><strong>${subject.code}</strong></p>
+                    <small>${subject.credits} Credits</small>
+                    ${currentUserRole === 'teacher' ? `
+                        <div style="margin-top: 1rem;">
+                            <button onclick="event.stopPropagation(); window.location.href='attendance.html?subject=${subject.name}&class=${subject.class}'" class="btn btn-primary" style="padding: 0.5rem; margin: 0.2rem; font-size: 0.8rem;">
+                                <i class="fas fa-calendar-check"></i> Attendance
+                            </button>
+                            <button onclick="event.stopPropagation(); window.location.href='marks.html?subject=${subject.name}&class=${subject.class}'" class="btn btn-success" style="padding: 0.5rem; margin: 0.2rem; font-size: 0.8rem;">
+                                <i class="fas fa-edit"></i> Marks
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function getSubjectColor(subjectName) {
+            const colors = {
+                'Mathematics': '#3498db',
+                'Physics': '#e74c3c',
+                'Chemistry': '#27ae60',
+                'English': '#f39c12',
+                'Biology': '#9b59b6',
+                'Science': '#1abc9c',
+                'Social Studies': '#34495e',
+                'History': '#d35400'
+            };
+            return colors[subjectName] || '#95a5a6';
+        }
+
+        function getSubjectIcon(subjectName) {
+            const icons = {
+                'Mathematics': 'calculator',
+                'Physics': 'atom',
+                'Chemistry': 'flask',
+                'English': 'book-open',
+                'Biology': 'dna',
+                'Science': 'microscope',
+                'Social Studies': 'globe',
+                'History': 'landmark'
+            };
+            return icons[subjectName] || 'book';
+        }
+
+        // Subject form submission
+        document.getElementById('subjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                code: document.getElementById('subjectCode').value.toUpperCase(),
+                name: document.getElementById('subjectName').value,
+                class: document.getElementById('subjectClass').value,
+                credits: parseInt(document.getElementById('subjectCredits').value) || 0,
+                description: document.getElementById('subjectDescription').value,
+                teacher: document.getElementById('subjectTeacher').value,
+                status: 'Active'
+            };
+            
+            // Check if subject code already exists
+            if (subjectsData.some(subject => subject.code === formData.code)) {
+                alert('Subject code already exists! Please use a different code.');
+                return;
+            }
+            
+            // Add new subject
+            const newSubject = {
+                id: Date.now(),
+                ...formData
+            };
+            
+            subjectsData.push(newSubject);
+            localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
+            
+            alert('Subject added successfully!');
+            
+            // Reset form and refresh data
+            this.reset();
+            updateSubjectsOverview();
+            loadSubjectsByClass();
+            loadAllSubjectsTable();
+        });
+
+        function viewSubjectDetails(subjectId) {
+            const subject = subjectsData.find(s => s.id == subjectId);
+            if (!subject) return;
+            
+            document.getElementById('modalSubjectName').textContent = subject.name;
+            document.getElementById('modalSubjectContent').innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong>Subject Code:</strong> ${subject.code}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Class:</strong> ${subject.class}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Credits:</strong> ${subject.credits || 'Not specified'}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Teacher:</strong> ${subject.teacher || 'Not assigned'}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Status:</strong> 
+                    <span class="badge" style="background: ${subject.status === 'Active' ? '#27ae60' : '#95a5a6'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">
+                        ${subject.status}
+                    </span>
+                </div>
+                ${subject.description ? `
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Description:</strong><br>
+                        ${subject.description}
+                    </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('subjectModal').style.display = 'block';
+        }
+
+        function closeSubjectModal() {
+            document.getElementById('subjectModal').style.display = 'none';
+        }
+
+        function editSubject(subjectId) {
+            const subject = subjectsData.find(s => s.id == subjectId);
+            if (!subject) return;
+            
+            const newName = prompt('Edit Subject Name:', subject.name);
+            if (newName && newName !== subject.name) {
+                subject.name = newName;
+                localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
+                loadSubjectsByClass();
+                loadAllSubjectsTable();
+                alert('Subject updated successfully!');
+            }
+        }
+
+        function deleteSubject(subjectId) {
+            if (confirm('Are you sure you want to delete this subject? This action cannot be undone.')) {
+                subjectsData = subjectsData.filter(s => s.id != subjectId);
+                localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
+                
+                updateSubjectsOverview();
+                loadSubjectsByClass();
+                loadAllSubjectsTable();
+                alert('Subject deleted successfully!');
+            }
+        }
+
+        function refreshSubjects() {
+            loadSubjectsData();
+            alert('Subjects data refreshed!');
+        }
+
+        function exportSubjects() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Subject Code,Subject Name,Class,Credits,Teacher,Status\n" +
+                subjectsData.map(subject => 
+                    `${subject.code},${subject.name},${subject.class},${subject.credits || ''},${subject.teacher || ''},${subject.status}`
+                ).join('\n');
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'subjects_data.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('Subjects data exported successfully!');
+        }
+
+        // Search and filter functionality
+        document.getElementById('searchSubjects').addEventListener('input', loadAllSubjectsTable);
+        document.getElementById('classFilter').addEventListener('change', function() {
+            loadAllSubjectsTable();
+            
+            // Show/hide class sections based on filter
+            const selectedClass = this.value;
+            const classSections = document.querySelectorAll('.class-subjects');
+            
+            classSections.forEach(section => {
+                if (selectedClass === '') {
+                    section.style.display = 'block';
+                } else {
+                    const classNum = section.querySelector('h3').textContent.includes(selectedClass);
+                    section.style.display = classNum ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('subjectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSubjectModal();
+            }
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

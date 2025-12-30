@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Attendance Management</p>
+            </div>
+            <div class="header-actions">
+                <span style="margin-right: 1rem; color: white;">
+                    <i class="fas fa-user"></i> <span id="userWelcome">Welcome</span>
+                </span>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu" id="navMenu">
+                <!-- Navigation will be populated based on user role -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Attendance Controls (Teacher/Admin only) -->
+        <div class="card fade-in" id="attendanceControls" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-calendar-check"></i> Mark Attendance</h2>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="attendanceDate">
+                        <i class="fas fa-calendar"></i> Date
+                    </label>
+                    <input type="date" id="attendanceDate" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="attendanceClass">
+                        <i class="fas fa-school"></i> Class
+                    </label>
+                    <select id="attendanceClass" class="form-control">
+                        <option value="">Select Class</option>
+                        <option value="10-A">Class 10-A</option>
+                        <option value="10-B">Class 10-B</option>
+                        <option value="11-A">Class 11-A</option>
+                        <option value="11-B">Class 11-B</option>
+                        <option value="12-A">Class 12-A</option>
+                        <option value="12-B">Class 12-B</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="attendanceSubject">
+                        <i class="fas fa-book"></i> Subject
+                    </label>
+                    <select id="attendanceSubject" class="form-control">
+                        <option value="">Select Subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="English">English</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button onclick="loadStudentsForAttendance()" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Load Students
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Attendance List (Teacher/Admin only) -->
+        <div class="card fade-in" id="studentAttendanceList" style="display: none;">
+            <div class="card-header">
+                <h3><i class="fas fa-users"></i> Student Attendance</h3>
+                <div>
+                    <button onclick="markAllPresent()" class="btn btn-success" style="margin-right: 0.5rem;">
+                        <i class="fas fa-check-double"></i> Mark All Present
+                    </button>
+                    <button onclick="markAllAbsent()" class="btn btn-danger" style="margin-right: 0.5rem;">
+                        <i class="fas fa-times"></i> Mark All Absent
+                    </button>
+                    <button onclick="saveAttendance()" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Attendance
+                    </button>
+                </div>
+            </div>
+            
+            <div id="attendanceStudentsList">
+                <!-- Students will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Attendance Summary -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> Attendance Summary</h2>
+                <div id="summaryFilters">
+                    <select id="summaryClass" class="form-control" style="max-width: 200px; display: inline-block; margin-right: 1rem;">
+                        <option value="">All Classes</option>
+                        <option value="10-A">Class 10-A</option>
+                        <option value="10-B">Class 10-B</option>
+                        <option value="11-A">Class 11-A</option>
+                        <option value="11-B">Class 11-B</option>
+                        <option value="12-A">Class 12-A</option>
+                        <option value="12-B">Class 12-B</option>
+                    </select>
+                    <button onclick="generateAttendanceReport()" class="btn btn-success">
+                        <i class="fas fa-file-alt"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>Present Today</h3>
+                    <p id="presentToday">0</p>
+                    <small>Students present</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-user-times"></i>
+                    </div>
+                    <h3>Absent Today</h3>
+                    <p id="absentToday">0</p>
+                    <small>Students absent</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Attendance Rate</h3>
+                    <p id="attendanceRate">0%</p>
+                    <small>Overall percentage</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <h3>Classes Today</h3>
+                    <p id="classesToday">0</p>
+                    <small>Total classes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Records -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-history"></i> Attendance Records</h2>
+                <div>
+                    <input type="text" id="searchAttendance" placeholder="Search by name or roll number..." 
+                           class="form-control" style="max-width: 300px; display: inline-block; margin-right: 1rem;">
+                    <button onclick="refreshAttendanceRecords()" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th id="actionsHeader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceRecordsTable">
+                        <!-- Attendance records will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Student Personal Attendance (Student view only) -->
+        <div class="card fade-in" id="studentPersonalAttendance" style="display: none;">
+            <div class="card-header">
+                <h2><i class="fas fa-user-check"></i> My Attendance</h2>
+            </div>
+            
+            <div class="attendance-grid">
+                <div class="attendance-item">
+                    <h4>Mathematics</h4>
+                    <div style="font-size: 2rem; color: #3498db; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>88%</strong></p>
+                    <small>22/25 classes</small>
+                    <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 0.5rem;">
+                        <div style="width: 88%; height: 100%; background: #27ae60; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>Physics</h4>
+                    <div style="font-size: 2rem; color: #27ae60; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>92%</strong></p>
+                    <small>23/25 classes</small>
+                    <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 0.5rem;">
+                        <div style="width: 92%; height: 100%; background: #27ae60; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>Chemistry</h4>
+                    <div style="font-size: 2rem; color: #e74c3c; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>80%</strong></p>
+                    <small>20/25 classes</small>
+                    <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 0.5rem;">
+                        <div style="width: 80%; height: 100%; background: #f39c12; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>English</h4>
+                    <div style="font-size: 2rem; color: #f39c12; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>96%</strong></p>
+                    <small>24/25 classes</small>
+                    <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 0.5rem;">
+                        <div style="width: 96%; height: 100%; background: #27ae60; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentUserRole = '';
+        let attendanceData = [];
+
+        // Initialize page based on user role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (!isLoggedIn) {
+                alert('Please login to access this page.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUserRole = userRole;
+            setupPageForRole(userRole, username);
+            loadAttendanceData();
+            
+            // Set today's date
+            document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+        });
+
+        function setupPageForRole(role, username) {
+            const navMenu = document.getElementById('navMenu');
+            const userWelcome = document.getElementById('userWelcome');
+            const attendanceControls = document.getElementById('attendanceControls');
+            const studentAttendanceList = document.getElementById('studentAttendanceList');
+            const studentPersonalAttendance = document.getElementById('studentPersonalAttendance');
+            const actionsHeader = document.getElementById('actionsHeader');
+            
+            // Setup navigation based on role
+            if (role === 'admin') {
+                navMenu.innerHTML = `
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-registration.html"><i class="fas fa-user-plus"></i> Add Student</a></li>
+                    <li><a href="attendance.html" class="active"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-shield"></i> Welcome, Admin';
+                attendanceControls.style.display = 'block';
+                
+            } else if (role === 'teacher') {
+                navMenu.innerHTML = `
+                    <li><a href="teacher-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="attendance.html" class="active"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> My Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> Welcome, Teacher';
+                attendanceControls.style.display = 'block';
+                
+            } else if (role === 'student') {
+                navMenu.innerHTML = `
+                    <li><a href="student-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="student-profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="attendance.html" class="active"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                    <li><a href="marks.html"><i class="fas fa-chart-line"></i> My Marks</a></li>
+                    <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                `;
+                userWelcome.innerHTML = '<i class="fas fa-user-graduate"></i> Welcome, Student';
+                studentPersonalAttendance.style.display = 'block';
+                actionsHeader.style.display = 'none';
+            }
+        }
+
+        function loadAttendanceData() {
+            // Load or generate sample attendance data
+            attendanceData = JSON.parse(localStorage.getItem('attendanceData') || '[]');
+            
+            if (attendanceData.length === 0) {
+                generateSampleAttendanceData();
+            }
+            
+            updateAttendanceSummary();
+            loadAttendanceRecords();
+        }
+
+        function generateSampleAttendanceData() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const subjects = ['Mathematics', 'Physics', 'Chemistry', 'English', 'Biology'];
+            const today = new Date();
+            
+            // Generate attendance for last 30 days
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                students.forEach(student => {
+                    subjects.forEach(subject => {
+                        // 85% chance of being present
+                        const isPresent = Math.random() > 0.15;
+                        
+                        attendanceData.push({
+                            id: Date.now() + Math.random(),
+                            date: dateStr,
+                            studentName: student.fullName,
+                            rollNumber: student.rollNumber,
+                            class: `${student.class}-${student.division}`,
+                            subject: subject,
+                            status: isPresent ? 'Present' : 'Absent'
+                        });
+                    });
+                });
+            }
+            
+            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+        }
+
+        function loadStudentsForAttendance() {
+            const selectedClass = document.getElementById('attendanceClass').value;
+            const selectedSubject = document.getElementById('attendanceSubject').value;
+            const selectedDate = document.getElementById('attendanceDate').value;
+            
+            if (!selectedClass || !selectedSubject || !selectedDate) {
+                alert('Please select class, subject, and date!');
+                return;
+            }
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const classStudents = students.filter(student => 
+                `${student.class}-${student.division}` === selectedClass
+            );
+            
+            if (classStudents.length === 0) {
+                alert('No students found for the selected class!');
+                return;
+            }
+            
+            const studentsList = document.getElementById('attendanceStudentsList');
+            studentsList.innerHTML = classStudents.map(student => `
+                <div class="attendance-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; margin: 0.5rem 0; background: #f8f9fa; border-radius: 8px;">
+                    <div>
+                        <strong>${student.fullName}</strong><br>
+                        <small>Roll No: ${student.rollNumber}</small>
+                    </div>
+                    <div class="attendance-controls">
+                        <label style="margin-right: 1rem;">
+                            <input type="radio" name="attendance_${student.id}" value="Present" checked>
+                            <span style="color: #27ae60; margin-left: 0.5rem;"><i class="fas fa-check"></i> Present</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="attendance_${student.id}" value="Absent">
+                            <span style="color: #e74c3c; margin-left: 0.5rem;"><i class="fas fa-times"></i> Absent</span>
+                        </label>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('studentAttendanceList').style.display = 'block';
+        }
+
+        function markAllPresent() {
+            document.querySelectorAll('input[type="radio"][value="Present"]').forEach(radio => {
+                radio.checked = true;
+            });
+        }
+
+        function markAllAbsent() {
+            document.querySelectorAll('input[type="radio"][value="Absent"]').forEach(radio => {
+                radio.checked = true;
+            });
+        }
+
+        function saveAttendance() {
+            const selectedClass = document.getElementById('attendanceClass').value;
+            const selectedSubject = document.getElementById('attendanceSubject').value;
+            const selectedDate = document.getElementById('attendanceDate').value;
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const classStudents = students.filter(student => 
+                `${student.class}-${student.division}` === selectedClass
+            );
+            
+            let savedCount = 0;
+            
+            classStudents.forEach(student => {
+                const attendanceRadio = document.querySelector(`input[name="attendance_${student.id}"]:checked`);
+                if (attendanceRadio) {
+                    const status = attendanceRadio.value;
+                    
+                    // Remove existing attendance for same date/student/subject
+                    attendanceData = attendanceData.filter(record => 
+                        !(record.date === selectedDate && 
+                          record.rollNumber === student.rollNumber && 
+                          record.subject === selectedSubject)
+                    );
+                    
+                    // Add new attendance record
+                    attendanceData.push({
+                        id: Date.now() + Math.random(),
+                        date: selectedDate,
+                        studentName: student.fullName,
+                        rollNumber: student.rollNumber,
+                        class: selectedClass,
+                        subject: selectedSubject,
+                        status: status
+                    });
+                    
+                    savedCount++;
+                }
+            });
+            
+            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            
+            alert(`Attendance saved successfully for ${savedCount} students!`);
+            
+            // Refresh data
+            updateAttendanceSummary();
+            loadAttendanceRecords();
+            
+            // Hide student list
+            document.getElementById('studentAttendanceList').style.display = 'none';
+        }
+
+        function updateAttendanceSummary() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayAttendance = attendanceData.filter(record => record.date === today);
+            
+            const presentToday = todayAttendance.filter(record => record.status === 'Present').length;
+            const absentToday = todayAttendance.filter(record => record.status === 'Absent').length;
+            const totalToday = presentToday + absentToday;
+            const attendanceRate = totalToday > 0 ? Math.round((presentToday / totalToday) * 100) : 0;
+            
+            document.getElementById('presentToday').textContent = presentToday;
+            document.getElementById('absentToday').textContent = absentToday;
+            document.getElementById('attendanceRate').textContent = attendanceRate + '%';
+            document.getElementById('classesToday').textContent = new Set(todayAttendance.map(r => r.subject)).size;
+        }
+
+        function loadAttendanceRecords() {
+            const tableBody = document.getElementById('attendanceRecordsTable');
+            const searchTerm = document.getElementById('searchAttendance').value.toLowerCase();
+            
+            let filteredData = attendanceData;
+            
+            if (searchTerm) {
+                filteredData = attendanceData.filter(record => 
+                    record.studentName.toLowerCase().includes(searchTerm) ||
+                    record.rollNumber.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Sort by date (newest first)
+            filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Limit to recent 50 records for performance
+            filteredData = filteredData.slice(0, 50);
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-calendar-times" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <p>No attendance records found.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = filteredData.map(record => `
+                <tr>
+                    <td>${record.date}</td>
+                    <td>${record.studentName}</td>
+                    <td>${record.rollNumber}</td>
+                    <td>${record.class}</td>
+                    <td>${record.subject}</td>
+                    <td>
+                        <span class="badge" style="background: ${record.status === 'Present' ? '#27ae60' : '#e74c3c'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">
+                            <i class="fas fa-${record.status === 'Present' ? 'check' : 'times'}"></i> ${record.status}
+                        </span>
+                    </td>
+                    <td ${currentUserRole === 'student' ? 'style="display: none;"' : ''}>
+                        ${currentUserRole !== 'student' ? `
+                            <button onclick="editAttendance('${record.id}')" class="btn btn-primary" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteAttendance('${record.id}')" class="btn btn-danger" style="padding: 0.25rem 0.5rem; margin: 0.1rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function editAttendance(recordId) {
+            const record = attendanceData.find(r => r.id == recordId);
+            if (record) {
+                const newStatus = record.status === 'Present' ? 'Absent' : 'Present';
+                if (confirm(`Change attendance status for ${record.studentName} on ${record.date} from ${record.status} to ${newStatus}?`)) {
+                    record.status = newStatus;
+                    localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+                    loadAttendanceRecords();
+                    updateAttendanceSummary();
+                }
+            }
+        }
+
+        function deleteAttendance(recordId) {
+            if (confirm('Are you sure you want to delete this attendance record?')) {
+                attendanceData = attendanceData.filter(r => r.id != recordId);
+                localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+                loadAttendanceRecords();
+                updateAttendanceSummary();
+                alert('Attendance record deleted successfully!');
+            }
+        }
+
+        function refreshAttendanceRecords() {
+            loadAttendanceRecords();
+            updateAttendanceSummary();
+            alert('Attendance records refreshed!');
+        }
+
+        function generateAttendanceReport() {
+            const selectedClass = document.getElementById('summaryClass').value;
+            let reportData = attendanceData;
+            
+            if (selectedClass) {
+                reportData = attendanceData.filter(record => record.class === selectedClass);
+            }
+            
+            const totalRecords = reportData.length;
+            const presentRecords = reportData.filter(r => r.status === 'Present').length;
+            const absentRecords = reportData.filter(r => r.status === 'Absent').length;
+            const overallRate = totalRecords > 0 ? Math.round((presentRecords / totalRecords) * 100) : 0;
+            
+            alert(`Attendance Report ${selectedClass ? 'for ' + selectedClass : '(All Classes)'}:\n\nTotal Records: ${totalRecords}\nPresent: ${presentRecords}\nAbsent: ${absentRecords}\nOverall Attendance Rate: ${overallRate}%\n\nIn a real system, this would generate a downloadable PDF report.`);
+        }
+
+        // Search functionality
+        document.getElementById('searchAttendance').addEventListener('input', function() {
+            loadAttendanceRecords();
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

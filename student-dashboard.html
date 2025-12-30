@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><i class="fas fa-graduation-cap"></i> EduManage</h1>
+                <p>Student Dashboard</p>
+            </div>
+            <div class="header-actions">
+                <span style="margin-right: 1rem; color: white;">
+                    <i class="fas fa-user-graduate"></i> Welcome, <span id="studentName">Student</span>
+                </span>
+                <button onclick="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="student-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="student-profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+                <li><a href="marks.html"><i class="fas fa-chart-line"></i> My Marks</a></li>
+                <li><a href="subjects.html"><i class="fas fa-book"></i> Subjects</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Student Overview -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> My Academic Overview</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Overall Attendance</h3>
+                    <p id="overallAttendance">85%</p>
+                    <small>This semester</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Overall Grade</h3>
+                    <p id="overallGrade">B+</p>
+                    <small>Current performance</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Subjects</h3>
+                    <p>6</p>
+                    <small>Enrolled subjects</small>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <h3>Classes Today</h3>
+                    <p>4</p>
+                    <small>Scheduled classes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="window.location.href='student-profile.html'">
+                    <div class="icon" style="color: #3498db;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>View Profile</h3>
+                    <p>Check and update your personal information</p>
+                </div>
+
+                <div class="dashboard-card" onclick="window.location.href='attendance.html'">
+                    <div class="icon" style="color: #27ae60;">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Check Attendance</h3>
+                    <p>View your attendance records</p>
+                </div>
+
+                <div class="dashboard-card" onclick="window.location.href='marks.html'">
+                    <div class="icon" style="color: #e74c3c;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>View Marks</h3>
+                    <p>Check your exam results and grades</p>
+                </div>
+
+                <div class="dashboard-card" onclick="downloadReports()">
+                    <div class="icon" style="color: #f39c12;">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Download Reports</h3>
+                    <p>Get your academic reports</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-calendar-day"></i> Today's Schedule</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Room</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>09:00 - 09:45</strong></td>
+                            <td>Mathematics</td>
+                            <td>Mr. Johnson</td>
+                            <td>Room 101</td>
+                            <td><span class="badge" style="background: #27ae60; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Attended</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>10:00 - 10:45</strong></td>
+                            <td>Physics</td>
+                            <td>Dr. Smith</td>
+                            <td>Lab 201</td>
+                            <td><span class="badge" style="background: #3498db; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">In Progress</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>11:15 - 12:00</strong></td>
+                            <td>Chemistry</td>
+                            <td>Ms. Davis</td>
+                            <td>Lab 202</td>
+                            <td><span class="badge" style="background: #f39c12; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Upcoming</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>14:00 - 14:45</strong></td>
+                            <td>English</td>
+                            <td>Mrs. Wilson</td>
+                            <td>Room 205</td>
+                            <td><span class="badge" style="background: #95a5a6; color: white; padding: 0.25rem 0.75rem; border-radius: 15px;">Scheduled</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Marks -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-line"></i> Recent Marks</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Exam Type</th>
+                            <th>Marks</th>
+                            <th>Total</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentMarksTable">
+                        <tr>
+                            <td>Mathematics</td>
+                            <td>Unit Test 1</td>
+                            <td>85</td>
+                            <td>100</td>
+                            <td>85%</td>
+                            <td><span class="grade grade-a">A</span></td>
+                            <td>2024-01-15</td>
+                        </tr>
+                        <tr>
+                            <td>Physics</td>
+                            <td>Mid Term</td>
+                            <td>78</td>
+                            <td>100</td>
+                            <td>78%</td>
+                            <td><span class="grade grade-b">B+</span></td>
+                            <td>2024-01-12</td>
+                        </tr>
+                        <tr>
+                            <td>Chemistry</td>
+                            <td>Lab Test</td>
+                            <td>92</td>
+                            <td>100</td>
+                            <td>92%</td>
+                            <td><span class="grade grade-a">A+</span></td>
+                            <td>2024-01-10</td>
+                        </tr>
+                        <tr>
+                            <td>English</td>
+                            <td>Essay</td>
+                            <td>88</td>
+                            <td>100</td>
+                            <td>88%</td>
+                            <td><span class="grade grade-a">A</span></td>
+                            <td>2024-01-08</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Attendance Summary -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-calendar-check"></i> Attendance Summary</h2>
+            </div>
+            <div class="attendance-grid">
+                <div class="attendance-item">
+                    <h4>Mathematics</h4>
+                    <div style="font-size: 2rem; color: #3498db; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>88%</strong></p>
+                    <small>22/25 classes</small>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>Physics</h4>
+                    <div style="font-size: 2rem; color: #27ae60; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>92%</strong></p>
+                    <small>23/25 classes</small>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>Chemistry</h4>
+                    <div style="font-size: 2rem; color: #e74c3c; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>80%</strong></p>
+                    <small>20/25 classes</small>
+                </div>
+                
+                <div class="attendance-item">
+                    <h4>English</h4>
+                    <div style="font-size: 2rem; color: #f39c12; margin: 0.5rem 0;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <p><strong>96%</strong></p>
+                    <small>24/25 classes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2><i class="fas fa-bullhorn"></i> Recent Announcements</h2>
+            </div>
+            <div id="announcements">
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #3498db; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Exam Schedule Released</strong>
+                    <p>Final examination schedule for semester 2 has been published. Check your subjects page for details.</p>
+                    <small><i class="fas fa-clock"></i> 2 days ago</small>
+                </div>
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #27ae60; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Library Hours Extended</strong>
+                    <p>Library will remain open until 8 PM during exam period starting next week.</p>
+                    <small><i class="fas fa-clock"></i> 3 days ago</small>
+                </div>
+                <div class="activity-item" style="padding: 1rem; border-left: 4px solid #e74c3c; margin: 0.5rem 0; background: #f8f9fa;">
+                    <strong>Fee Payment Reminder</strong>
+                    <p>Semester fees payment deadline is approaching. Please complete payment by month end.</p>
+                    <small><i class="fas fa-clock"></i> 5 days ago</small>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EduManage - Student Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in and has student role
+        window.addEventListener('load', function() {
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!isLoggedIn || userRole !== 'student') {
+                alert('Access denied! Please login as student.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            loadStudentData();
+        });
+
+        // Load student data
+        function loadStudentData() {
+            const username = localStorage.getItem('username');
+            
+            // Try to find student data
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const currentStudent = students.find(s => s.rollNumber === username);
+            
+            if (currentStudent) {
+                document.getElementById('studentName').textContent = currentStudent.fullName;
+                // Update dashboard with real student data
+                updateStudentDashboard(currentStudent);
+            } else {
+                // Use demo data for demo login
+                document.getElementById('studentName').textContent = 'John Doe';
+                updateStudentDashboard({
+                    fullName: 'John Doe',
+                    rollNumber: 'student123',
+                    class: '10',
+                    division: 'A'
+                });
+            }
+        }
+
+        function updateStudentDashboard(student) {
+            // Calculate random but consistent attendance
+            const attendancePercentage = Math.floor(Math.random() * 20) + 80; // 80-100%
+            document.getElementById('overallAttendance').textContent = attendancePercentage + '%';
+            
+            // Calculate overall grade based on recent marks
+            const grades = ['A+', 'A', 'B+', 'B', 'C+'];
+            const randomGrade = grades[Math.floor(Math.random() * grades.length)];
+            document.getElementById('overallGrade').textContent = randomGrade;
+        }
+
+        // Quick action functions
+        function downloadReports() {
+            alert('Download Reports:\n\n• Attendance Report\n• Marks Report\n• Progress Report\n• Fee Receipt\n\nIn a real system, these would be downloadable PDF files.');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Add click handlers for dashboard cards
+        document.querySelectorAll('.dashboard-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Update time-based class status
+        function updateClassStatus() {
+            const now = new Date();
+            const currentTime = now.getHours() * 100 + now.getMinutes();
+            
+            // This would update class statuses based on current time
+            // For demo purposes, we'll keep the static status
+        }
+
+        // Add progress bars for attendance
+        function addAttendanceProgressBars() {
+            const attendanceItems = document.querySelectorAll('.attendance-item');
+            attendanceItems.forEach(item => {
+                const percentage = parseInt(item.querySelector('strong').textContent);
+                const progressBar = document.createElement('div');
+                progressBar.style.cssText = `
+                    width: 100%;
+                    height: 8px;
+                    background: #e0e0e0;
+                    border-radius: 4px;
+                    margin-top: 0.5rem;
+                    overflow: hidden;
+                `;
+                
+                const progress = document.createElement('div');
+                progress.style.cssText = `
+                    width: ${percentage}%;
+                    height: 100%;
+                    background: ${percentage >= 90 ? '#27ae60' : percentage >= 75 ? '#f39c12' : '#e74c3c'};
+                    transition: width 1s ease;
+                `;
+                
+                progressBar.appendChild(progress);
+                item.appendChild(progressBar);
+            });
+        }
+
+        // Initialize page
+        setTimeout(addAttendanceProgressBars, 1000);
+        updateClassStatus();
+        setInterval(updateClassStatus, 60000); // Update every minute
+    </script>
+</body>
+</html>
